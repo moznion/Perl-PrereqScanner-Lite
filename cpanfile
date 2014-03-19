@@ -10,11 +10,6 @@ on configure => sub {
 };
 
 on test => sub {
-    requires 'File::Temp', '0.12';
     requires 'Test::Deep';
     requires 'Test::More', '0.98';
-    requires 'Time::Local';
-    requires 'Getopt::Long';
-    requires 'TieHash';
-    requires 'parent';
 };
