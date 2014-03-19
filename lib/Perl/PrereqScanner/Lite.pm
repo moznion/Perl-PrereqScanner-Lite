@@ -65,8 +65,6 @@ sub _scan {
     for my $token (@$tokens) {
         my $token_name = $token->{name};
 
-        # use Data::Dumper::Concise; warn Dumper($token); # TODO remove
-
         if ($token_name eq 'RequiredName') {
             # For requiring
             # e.g.
