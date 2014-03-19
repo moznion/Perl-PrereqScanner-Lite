@@ -18,10 +18,40 @@ sub new {
     }, $class;
 }
 
-sub scan_script {
-    my ($self, $script) = @_;
+sub scan_string {
+    my ($self, $string) = @_;
+
+    my $tokens = $self->lexer->tokenize($string);
+    $self->_scan($tokens);
+}
+
+sub scan_file {
+    my ($self, $file) = @_;
+
+    open my $fh, '<', $file;
+    my $script = do { local $/; <$fh>; };
 
     my $tokens = $self->lexer->tokenize($script);
+    $self->_scan($tokens);
+}
+
+sub scan_tokens {
+    my ($self, $tokens) = @_;
+    $self->_scan($tokens);
+}
+
+sub scan_module {
+    my ($self, $module) = @_;
+
+    require Module::Path;
+
+    if (defined(my $path = Module::Path::module_path($module))) {
+        return $self->scan_file($path);
+    }
+}
+
+sub _scan {
+    my ($self, $tokens) = @_;
 
     my $module_name    = 0;
     my $module_version = 0;
