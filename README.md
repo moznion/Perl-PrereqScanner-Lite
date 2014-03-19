@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/moznion/Perl-PrereqScanner-Lite.png?branch=master)](https://travis-ci.org/moznion/Perl-PrereqScanner-Lite)
 # NAME
 
 Perl::PrereqScanner::Lite - It's new $module
