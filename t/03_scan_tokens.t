@@ -36,6 +36,7 @@ cmp_deeply($got, {
     'Getopt::Long' => 0,
     'Getopt::Std'  => 0,
     'TieHash'      => 0,
+    'Text::Tabs'   => 0,
 });
 
 done_testing;

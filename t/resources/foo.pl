@@ -10,6 +10,7 @@ use parent qw/Env English/;
 use base ("Carp", 'Cwd');
 use base qw/Getopt::Long Getopt::Std/;
 require TieHash;
-require "Text/Tabs.pm"; # <= should be ignored
+require Text::Tabs;
+require "Text/Soundex.pm"; # <= should be ignored
 
 1;

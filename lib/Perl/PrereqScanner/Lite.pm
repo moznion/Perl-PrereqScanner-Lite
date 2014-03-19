@@ -58,6 +58,7 @@ sub _scan {
 
     my $is_in_reglist = 0;
     my $is_in_usedecl = 0;
+    my $is_in_reqdecl = 0;
     my $is_inherited  = 0;
     my $is_in_list    = 0;
 
@@ -75,10 +76,47 @@ sub _scan {
             next;
         }
 
+        if ($token_name eq 'RequireDecl') {
+            $is_in_reqdecl = 1;
+            next;
+        }
+
+        if ($is_in_reqdecl) {
+            if ($token_name eq 'RequiredName') {
+                if (not defined $modules{$token->{data}}) {
+                    $modules{$token->{data}} = 0;
+                }
+
+                $is_in_reqdecl = 0;
+                next;
+            }
+
+            if ($token_name =~ /Namespace(?:Resolver)?/) {
+                $module_name .= $token->{data};
+                next;
+            }
+
+            if ($token_name eq 'SemiColon') {
+                unless ($module_name) {
+                    next;
+                }
+
+                if (not defined $modules{$module_name}) {
+                    $modules{$module_name} = 0;
+                }
+
+                $module_name   = '';
+                $is_in_reqdecl = 0;
+                next;
+            }
+        }
+
         if ($token_name eq 'UseDecl') {
             $is_in_usedecl = 1;
+            next;
         }
-        elsif ($is_in_usedecl) {
+
+        if ($is_in_usedecl) {
             if ($token_name eq 'UsedName') {
                 $module_name = $token->{data};
                 if ($module_name =~ /(?:base|parent)/) {
