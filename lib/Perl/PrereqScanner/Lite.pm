@@ -82,18 +82,6 @@ sub _scan {
             $is_in_usedecl = 1;
         }
         elsif ($is_in_usedecl) {
-            if ($token_name eq 'Double') {
-                # For specifying perl version
-                # e.g.
-                #   use 5.012;
-                push @modules, {
-                    name    => 'perl',
-                    version => $token->data,
-                };
-                $is_in_usedecl = 0;
-                next;
-            }
-
             if ($token_name eq 'UsedName') {
                 $module_name = $token->{data};
                 if ($module_name =~ /(?:base|parent)/) {
@@ -162,16 +150,27 @@ sub _scan {
                         };
                     }
                 }
-
                 next;
             }
 
-            if ($token_name =~ /\A(?:Raw)?String\Z/) {
-                # For module version
-                # e.g.
-                #   use Foo::Bar '0.0.1';
-                if ($token->data =~ /\d+(\.\d+)*/) {
-                    $module_version = $token->data;
+            if ($token_name =~ /\A(?:Raw)?String\Z/ || $token_name eq 'Double') {
+                if (!$module_name) {
+                    # For specifying perl version
+                    # e.g.
+                    #   use 5.012;
+                    push @modules, {
+                        name    => 'perl',
+                        version => $token->data,
+                    };
+                    $is_in_usedecl = 0;
+                }
+                else {
+                    # For module version
+                    # e.g.
+                    #   use Foo::Bar '0.0.1';
+                    if ($token->data =~ /\d+(\.\d+)*/) {
+                        $module_version = $token->data;
+                    }
                 }
 
                 next;
