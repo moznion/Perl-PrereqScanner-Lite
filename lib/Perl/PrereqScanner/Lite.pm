@@ -28,7 +28,7 @@ sub scan_string {
 sub scan_file {
     my ($self, $file) = @_;
 
-    open my $fh, '<', $file;
+    open my $fh, '<', $file or die "Cannot open file: $file";
     my $script = do { local $/; <$fh>; };
 
     my $tokens = $self->lexer->tokenize($script);
