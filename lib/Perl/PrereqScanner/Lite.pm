@@ -61,7 +61,7 @@ sub _scan {
     my $is_inherited  = 0;
     my $is_in_list    = 0;
 
-    my @modules;
+    my %modules;
     for my $token (@$tokens) {
         my $token_name = $token->{name};
 
@@ -71,10 +71,9 @@ sub _scan {
             # For requiring
             # e.g.
             #   require Foo::Bar;
-            push @modules, {
-                name    => $token->data,
-                version => 0,
-            };
+            if (not defined $modules{$token->data}) {
+                $modules{$token->data} = 0;
+            }
             next;
         }
 
@@ -97,10 +96,9 @@ sub _scan {
 
             if ($token_name eq 'SemiColon') {
                 # End of declare of use statement
-                push @modules, {
-                    name    => $module_name,
-                    version => $module_version,
-                };
+                if (!$modules{$module_name} || $modules{$module_name} < $module_version) {
+                    $modules{$module_name} = $module_version;
+                }
 
                 $module_name    = '';
                 $module_version = 0;
@@ -124,10 +122,9 @@ sub _scan {
                 elsif ($is_in_reglist) {
                     if ($token_name eq 'RegExp') {
                         for my $_module_name (split /\s+/, $token->data) {
-                            push @modules, {
-                                name    => $_module_name,
-                                version => 0,
-                            };
+                            if (not defined $modules{$_module_name}) {
+                                $modules{$_module_name} = 0;
+                            }
                         }
                         $is_in_reglist = 0;
                     }
@@ -144,10 +141,9 @@ sub _scan {
                 }
                 elsif ($is_in_list) {
                     if ($token_name =~ /\A(?:Raw)?String\Z/) {
-                        push @modules, {
-                            name    => $token->data,
-                            version => 0,
-                        };
+                        if (not defined $modules{$token->data}) {
+                            $modules{$token->data} = 0;
+                        }
                     }
                 }
                 next;
@@ -158,10 +154,10 @@ sub _scan {
                     # For specifying perl version
                     # e.g.
                     #   use 5.012;
-                    push @modules, {
-                        name    => 'perl',
-                        version => $token->data,
-                    };
+                    my $perl_version = $token->data;
+                    if (!$modules{perl} || $modules{perl} < $perl_version) {
+                        $modules{perl} = $perl_version;
+                    }
                     $is_in_usedecl = 0;
                 }
                 else {
@@ -178,7 +174,7 @@ sub _scan {
         }
     }
 
-    return \@modules;
+    return \%modules;
 }
 
 1;

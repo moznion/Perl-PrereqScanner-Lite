@@ -14,50 +14,23 @@ my $scanner = Perl::PrereqScanner::Lite->new;
 
 subtest 'foo.pl' => sub {
     my $got = $scanner->scan_file(catfile($FindBin::Bin, 'resources', 'foo.pl'));
-    cmp_deeply($got, [
-        {
-            name    => 'strict',
-            version => 0,
-        },
-        {
-            name    => 'warnings',
-            version => 0,
-        },
-        {
-            name    => 'File::Spec',
-            version => 0,
-        },
-        {
-            name    => 'IO::File',
-            version => 1.08,
-        },
-    ]);
+    cmp_deeply($got, {
+        strict       => 0,
+        warnings     => 0,
+        'File::Spec' => 0,
+        'IO::File'   => 1.08,
+    });
 };
 
 subtest 'bar.pl' => sub {
     my $got = $scanner->scan_file(catfile($FindBin::Bin, 'resources', 'bar.pl'));
-    cmp_deeply($got, [
-        {
-            name    => 'strict',
-            version => 0,
-        },
-        {
-            name    => 'warnings',
-            version => 0,
-        },
-        {
-            name    => 'Time::Local',
-            version => 0,
-        },
-        {
-            name    => 'Exporter',
-            version => 0,
-        },
-        {
-            name    => 'File::Temp',
-            version => 0.12,
-        },
-    ]);
+    cmp_deeply($got, {
+        strict        => 0,
+        warnings      => 0,
+        'Time::Local' => 0,
+        'Exporter'    => 0,
+        'File::Temp'  => 0.12,
+    });
 };
 
 done_testing;
