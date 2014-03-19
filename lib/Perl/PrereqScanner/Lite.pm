@@ -66,23 +66,17 @@ sub _scan {
     for my $token (@$tokens) {
         my $token_name = $token->{name};
 
-        if ($token_name eq 'RequiredName') {
-            # For requiring
-            # e.g.
-            #   require Foo::Bar;
-            if (not defined $modules{$token->data}) {
-                $modules{$token->data} = 0;
-            }
-            next;
-        }
-
         if ($token_name eq 'RequireDecl') {
             $is_in_reqdecl = 1;
             next;
         }
 
         if ($is_in_reqdecl) {
+            # For requiring
+
             if ($token_name eq 'RequiredName') {
+                # e.g.
+                #   require Foo;
                 if (not defined $modules{$token->{data}}) {
                     $modules{$token->{data}} = 0;
                 }
@@ -92,6 +86,8 @@ sub _scan {
             }
 
             if ($token_name =~ /Namespace(?:Resolver)?/) {
+                # e.g.
+                #   require Foo::Bar;
                 $module_name .= $token->{data};
                 next;
             }
@@ -117,7 +113,12 @@ sub _scan {
         }
 
         if ($is_in_usedecl) {
+            # For using
+
             if ($token_name eq 'UsedName') {
+                # e.g.
+                #   use Foo;
+                #   use parent qw/Foo/;
                 $module_name = $token->{data};
                 if ($module_name =~ /(?:base|parent)/) {
                     $is_inherited = 1;
@@ -126,6 +127,8 @@ sub _scan {
             }
 
             if ($token_name =~ /Namespace(?:Resolver)?/) {
+                # e.g.
+                #   use Foo::Bar;
                 $module_name .= $token->{data};
                 next;
             }
