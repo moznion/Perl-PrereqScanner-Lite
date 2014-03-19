@@ -14,4 +14,7 @@ on test => sub {
     requires 'Test::Deep';
     requires 'Test::More', '0.98';
     requires 'Time::Local';
+    requires 'Getopt::Long';
+    requires 'TieHash';
+    requires 'parent';
 };
