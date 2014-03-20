@@ -72,17 +72,15 @@ sub _scan {
     for my $token (@$tokens) {
         my $token_type = $token->{type};
 
+        # For require statement
         if ($token_type == REQUIRE_DECL) {
             $is_in_reqdecl = 1;
             next;
         }
-
         if ($is_in_reqdecl) {
-            # For requiring
-
+            # e.g.
+            #   require Foo;
             if ($token_type == REQUIRED_NAME) {
-                # e.g.
-                #   require Foo;
                 if (not defined $self->{modules}->{$token->{data}}) {
                     $self->{modules}->{$token->{data}} = 0;
                 }
@@ -91,13 +89,14 @@ sub _scan {
                 next;
             }
 
+            # e.g.
+            #   require Foo::Bar;
             if ($token_type == NAMESPACE || $token_type == NAMESPACE_RESOLVER) {
-                # e.g.
-                #   require Foo::Bar;
                 $module_name .= $token->{data};
                 next;
             }
 
+            # End of declare of require statement
             if ($token_type == SEMI_COLON) {
                 unless ($module_name) {
                     next;
@@ -115,18 +114,16 @@ sub _scan {
             next;
         }
 
+        # For use statement
         if ($token_type == USE_DECL) {
             $is_in_usedecl = 1;
             next;
         }
-
         if ($is_in_usedecl) {
-            # For using
-
+            # e.g.
+            #   use Foo;
+            #   use parent qw/Foo/;
             if ($token_type == USED_NAME) {
-                # e.g.
-                #   use Foo;
-                #   use parent qw/Foo/;
                 $module_name = $token->{data};
                 if ($module_name =~ /(?:base|parent)/) {
                     $is_inherited = 1;
@@ -134,15 +131,15 @@ sub _scan {
                 next;
             }
 
+            # e.g.
+            #   use Foo::Bar;
             if ($token_type == NAMESPACE || $token_type == NAMESPACE_RESOLVER) {
-                # e.g.
-                #   use Foo::Bar;
                 $module_name .= $token->{data};
                 next;
             }
 
+            # End of declare of use statement
             if ($token_type == SEMI_COLON) {
-                # End of declare of use statement
                 if (!$self->{modules}->{$module_name} || $self->{modules}->{$module_name} < $module_version) {
                     $self->{modules}->{$module_name} = $module_version;
                 }
@@ -157,9 +154,8 @@ sub _scan {
                 next;
             }
 
+            # Section for parent/base
             if ($is_inherited) {
-                # Section for parent/base
-
                 # For qw() notation
                 # e.g.
                 #   use parent qw/Foo Bar/;
@@ -206,7 +202,7 @@ sub _scan {
 
             if ($token_type == STRING || $token_type == RAW_STRING || $token_type == DOUBLE) {
                 if (!$module_name) {
-                    # For specifying perl version
+                    # For perl version
                     # e.g.
                     #   use 5.012;
                     my $perl_version = $token->data;
@@ -247,15 +243,73 @@ __END__
 
 =head1 NAME
 
-Perl::PrereqScanner::Lite - It's new $module
+Perl::PrereqScanner::Lite - Lightweight Prereqs Scanner for Perl
 
 =head1 SYNOPSIS
 
     use Perl::PrereqScanner::Lite;
 
+    my $scanner = Perl::PrereqScanner::Lite->new;
+    $scanner->add_extra_scanner('Moose');
+    my $modules = $scanner->scan_file('path/to/file');
+
 =head1 DESCRIPTION
 
-Perl::PrereqScanner::Lite is ...
+Perl::PrereqScanner::Lite is the lightweight prereqs scanner for perl.
+
+=head1 METHODS
+
+=over 4
+
+=item * new
+
+Create scanner instance.
+
+=item * scan_file($file_path)
+
+Scan and figure out prereqs by file path.
+
+=item * scan_string($string)
+
+Scan and figure out prereqs by source code string written in perl.
+
+e.g.
+
+    open my $fh, '<', __FILE__;
+    my $string = do { local $/; <$fh> };
+    my $modules = $scanner->scan_string($string);
+
+=item * scan_module($module_name)
+
+Scan and figure out prereqs by module name.
+
+e.g.
+
+    my $modules = $scanner->scan_module('Perl::PrereqScanner::Lite');
+
+=item * scan_tokens($tokens)
+
+Scan and figure out prereqs by tokens of L<Compiler::Lexer>.
+
+e.g.
+
+    open my $fh, '<', __FILE__;
+    my $string = do { local $/; <$fh> };
+    my $tokens = Compiler::Lexer->new->tokenize($string);
+    my $modules = $scanner->scan_tokens($tokens);
+
+=item * add_extra_scanner($scanner_name)
+
+Add extra scanner to scan and figure out prereqs. This module loads extra scanner such as C<Perl::PrereqScanner::Lite::Scanner::$scanner_name> if specifying scanner name through this method.
+
+Now this module supports extra scanner for L<Moose> families C<extends> notation.
+Please see also L<Perl::PrereqScanner::Lite::Scanner::Moose>.
+
+=back
+
+=head1 SEE ALSO
+
+L<Perl::PrereqScanner>, L<Compiler::Lexer>
 
 =head1 LICENSE
 
