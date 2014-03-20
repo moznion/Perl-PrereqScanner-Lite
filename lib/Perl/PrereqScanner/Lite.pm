@@ -7,6 +7,7 @@ use Class::Accessor::Lite (
     new => 0,
     rw  => [qw/lexer extra_scanners modules/],
 );
+use Perl::PrereqScanner::Lite::Constants;
 
 our $VERSION = "0.01";
 
@@ -73,9 +74,9 @@ sub _scan {
     my $is_in_list    = 0;
 
     for my $token (@$tokens) {
-        my $token_name = $token->{name};
+        my $token_type = $token->{type};
 
-        if ($token_name eq 'RequireDecl') {
+        if ($token_type == REQUIRE_DECL) {
             $is_in_reqdecl = 1;
             next;
         }
@@ -83,7 +84,7 @@ sub _scan {
         if ($is_in_reqdecl) {
             # For requiring
 
-            if ($token_name eq 'RequiredName') {
+            if ($token_type == REQUIRED_NAME) {
                 # e.g.
                 #   require Foo;
                 if (not defined $self->modules->{$token->{data}}) {
@@ -94,14 +95,14 @@ sub _scan {
                 next;
             }
 
-            if ($token_name =~ /Namespace(?:Resolver)?/) {
+            if ($token_type == NAMESPACE || $token_type == NAMESPACE_RESOLVER) {
                 # e.g.
                 #   require Foo::Bar;
                 $module_name .= $token->{data};
                 next;
             }
 
-            if ($token_name eq 'SemiColon') {
+            if ($token_type == SEMI_COLON) {
                 unless ($module_name) {
                     next;
                 }
@@ -118,7 +119,7 @@ sub _scan {
             next;
         }
 
-        if ($token_name eq 'UseDecl') {
+        if ($token_type == USE_DECL) {
             $is_in_usedecl = 1;
             next;
         }
@@ -126,7 +127,7 @@ sub _scan {
         if ($is_in_usedecl) {
             # For using
 
-            if ($token_name eq 'UsedName') {
+            if ($token_type == USED_NAME) {
                 # e.g.
                 #   use Foo;
                 #   use parent qw/Foo/;
@@ -137,14 +138,14 @@ sub _scan {
                 next;
             }
 
-            if ($token_name =~ /Namespace(?:Resolver)?/) {
+            if ($token_type == NAMESPACE || $token_type == NAMESPACE_RESOLVER) {
                 # e.g.
                 #   use Foo::Bar;
                 $module_name .= $token->{data};
                 next;
             }
 
-            if ($token_name eq 'SemiColon') {
+            if ($token_type == SEMI_COLON) {
                 # End of declare of use statement
                 if (!$self->modules->{$module_name} || $self->modules->{$module_name} < $module_version) {
                     $self->modules->{$module_name} = $module_version;
@@ -166,11 +167,11 @@ sub _scan {
                 # For qw() notation
                 # e.g.
                 #   use parent qw/Foo Bar/;
-                if ($token_name eq 'RegList') {
+                if ($token_type == REG_LIST) {
                     $is_in_reglist = 1;
                 }
                 elsif ($is_in_reglist) {
-                    if ($token_name eq 'RegExp') {
+                    if ($token_type == REG_EXP) {
                         for my $_module_name (split /\s+/, $token->data) {
                             if (not defined $self->modules->{$_module_name}) {
                                 $self->modules->{$_module_name} = 0;
@@ -183,14 +184,14 @@ sub _scan {
                 # For simply list
                 # e.g.
                 #   use parent ('Foo' 'Bar');
-                elsif ($token_name eq 'LeftParenthesis') {
+                elsif ($token_type == LEFT_PAREN) {
                     $is_in_list = 1;
                 }
-                elsif ($token_name eq 'RightParenthesis') {
+                elsif ($token_type == RIGHT_PAREN) {
                     $is_in_list = 0;
                 }
                 elsif ($is_in_list) {
-                    if ($token_name =~ /\A(?:Raw)?String\Z/) {
+                    if ($token_type == STRING || $token_type == RAW_STRING) {
                         if (not defined $self->modules->{$token->data}) {
                             $self->modules->{$token->data} = 0;
                         }
@@ -200,14 +201,14 @@ sub _scan {
                 # For string
                 # e.g.
                 #   use parent "Foo"
-                elsif ($token_name =~ /\A(?:Raw)?String\Z/) {
+                elsif ($token_type == STRING || $token_type == RAW_STRING) {
                     $self->modules->{$token->data} = 0;
                 }
 
                 next;
             }
 
-            if ($token_name =~ /\A(?:Raw)?String\Z/ || $token_name eq 'Double') {
+            if ($token_type == STRING || $token_type == RAW_STRING || $token_type == DOUBLE) {
                 if (!$module_name) {
                     # For specifying perl version
                     # e.g.
@@ -234,7 +235,7 @@ sub _scan {
         }
 
         for my $extra_scanner (@{$self->extra_scanners}) {
-            if ($extra_scanner->scan($self, $token, $token_name)) {
+            if ($extra_scanner->scan($self, $token, $token_type)) {
                 last;
             }
         }
