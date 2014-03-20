@@ -37,6 +37,10 @@ cmp_deeply($got, {
     'Getopt::Std'  => 0,
     'TieHash'      => 0,
     'Text::Tabs'   => 0,
+    'PerlIO'       => 0,
+    'Opcode'       => 0,
+    'Pod::Checker' => 0,
+    'Pod::Find'    => 0,
 });
 
 done_testing;

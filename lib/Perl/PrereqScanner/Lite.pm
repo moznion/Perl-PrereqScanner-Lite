@@ -185,6 +185,14 @@ sub _scan {
                         }
                     }
                 }
+
+                # For string
+                # e.g.
+                #   use parent "Foo"
+                elsif ($token_name =~ /\A(?:Raw)?String\Z/) {
+                    $modules{$token->data} = 0;
+                }
+
                 next;
             }
 
