@@ -5,7 +5,7 @@ use warnings;
 use Compiler::Lexer;
 use Class::Accessor::Lite (
     new => 0,
-    rw  => [qw/lexer/],
+    rw  => [qw/lexer extra_scanners modules/],
 );
 
 our $VERSION = "0.01";
@@ -14,8 +14,18 @@ sub new {
     my ($class) = @_;
 
     bless {
-        lexer => Compiler::Lexer->new,
+        lexer          => Compiler::Lexer->new,
+        extra_scanners => [],
+        modules        => {},
     }, $class;
+}
+
+sub add_extra_scanner {
+    my ($self, $scanner_name) = @_;
+
+    my $extra_scanner = "Perl::PrereqScanner::Lite::$scanner_name";
+    eval "require $extra_scanner"; ## no critic
+    push @{$self->extra_scanners}, $extra_scanner;
 }
 
 sub scan_string {
@@ -62,7 +72,6 @@ sub _scan {
     my $is_inherited  = 0;
     my $is_in_list    = 0;
 
-    my %modules;
     for my $token (@$tokens) {
         my $token_name = $token->{name};
 
@@ -77,8 +86,8 @@ sub _scan {
             if ($token_name eq 'RequiredName') {
                 # e.g.
                 #   require Foo;
-                if (not defined $modules{$token->{data}}) {
-                    $modules{$token->{data}} = 0;
+                if (not defined $self->modules->{$token->{data}}) {
+                    $self->modules->{$token->{data}} = 0;
                 }
 
                 $is_in_reqdecl = 0;
@@ -97,14 +106,16 @@ sub _scan {
                     next;
                 }
 
-                if (not defined $modules{$module_name}) {
-                    $modules{$module_name} = 0;
+                if (not defined $self->modules->{$module_name}) {
+                    $self->modules->{$module_name} = 0;
                 }
 
                 $module_name   = '';
                 $is_in_reqdecl = 0;
                 next;
             }
+
+            next;
         }
 
         if ($token_name eq 'UseDecl') {
@@ -135,8 +146,8 @@ sub _scan {
 
             if ($token_name eq 'SemiColon') {
                 # End of declare of use statement
-                if (!$modules{$module_name} || $modules{$module_name} < $module_version) {
-                    $modules{$module_name} = $module_version;
+                if (!$self->modules->{$module_name} || $self->modules->{$module_name} < $module_version) {
+                    $self->modules->{$module_name} = $module_version;
                 }
 
                 $module_name    = '';
@@ -161,8 +172,8 @@ sub _scan {
                 elsif ($is_in_reglist) {
                     if ($token_name eq 'RegExp') {
                         for my $_module_name (split /\s+/, $token->data) {
-                            if (not defined $modules{$_module_name}) {
-                                $modules{$_module_name} = 0;
+                            if (not defined $self->modules->{$_module_name}) {
+                                $self->modules->{$_module_name} = 0;
                             }
                         }
                         $is_in_reglist = 0;
@@ -180,8 +191,8 @@ sub _scan {
                 }
                 elsif ($is_in_list) {
                     if ($token_name =~ /\A(?:Raw)?String\Z/) {
-                        if (not defined $modules{$token->data}) {
-                            $modules{$token->data} = 0;
+                        if (not defined $self->modules->{$token->data}) {
+                            $self->modules->{$token->data} = 0;
                         }
                     }
                 }
@@ -190,7 +201,7 @@ sub _scan {
                 # e.g.
                 #   use parent "Foo"
                 elsif ($token_name =~ /\A(?:Raw)?String\Z/) {
-                    $modules{$token->data} = 0;
+                    $self->modules->{$token->data} = 0;
                 }
 
                 next;
@@ -202,8 +213,8 @@ sub _scan {
                     # e.g.
                     #   use 5.012;
                     my $perl_version = $token->data;
-                    if (!$modules{perl} || $modules{perl} < $perl_version) {
-                        $modules{perl} = $perl_version;
+                    if (!$self->modules->{perl} || $self->modules->{perl} < $perl_version) {
+                        $self->modules->{perl} = $perl_version;
                     }
                     $is_in_usedecl = 0;
                 }
@@ -218,10 +229,18 @@ sub _scan {
 
                 next;
             }
+
+            next;
+        }
+
+        for my $extra_scanner (@{$self->extra_scanners}) {
+            if ($extra_scanner->scan($self, $token, $token_name)) {
+                last;
+            }
         }
     }
 
-    return \%modules;
+    return $self->modules;
 }
 
 1;
