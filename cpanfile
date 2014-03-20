@@ -1,4 +1,4 @@
-requires 'Compiler::Lexer';
+requires 'Compiler::Lexer', '0.17';
 requires 'Module::Path';
 requires 'parent', 0;
 requires 'perl', '5.008005';
@@ -17,4 +17,5 @@ on test => sub {
 on develop => sub {
     requires 'Perl::PrereqScanner';
     requires 'autodie';
+    requires 'Test::Perl::Critic';
 };
