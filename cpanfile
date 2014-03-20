@@ -1,6 +1,6 @@
-requires 'Class::Accessor::Lite';
 requires 'Compiler::Lexer';
 requires 'Module::Path';
+requires 'parent', 0;
 requires 'perl', '5.008005';
 
 on configure => sub {
@@ -12,4 +12,9 @@ on configure => sub {
 on test => sub {
     requires 'Test::Deep';
     requires 'Test::More', '0.98';
+};
+
+on develop => sub {
+    requires 'Perl::PrereqScanner';
+    requires 'autodie';
 };
