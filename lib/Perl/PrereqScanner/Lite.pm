@@ -20,7 +20,7 @@ sub new {
 sub add_extra_scanner {
     my ($self, $scanner_name) = @_;
 
-    my $extra_scanner = "Perl::PrereqScanner::Lite::$scanner_name";
+    my $extra_scanner = "Perl::PrereqScanner::Lite::Scanner::$scanner_name";
     eval "require $extra_scanner"; ## no critic
     push @{$self->{extra_scanners}}, $extra_scanner;
 }

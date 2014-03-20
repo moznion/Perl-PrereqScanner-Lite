@@ -1,4 +1,4 @@
-package Perl::PrereqScanner::Lite::Moose;
+package Perl::PrereqScanner::Lite::Scanner::Moose;
 use strict;
 use warnings;
 use utf8;
