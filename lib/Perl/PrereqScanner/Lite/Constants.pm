@@ -12,21 +12,21 @@ our @EXPORT = qw(
 );
 
 use constant {
-    REQUIRE_DECL       => 68,
-    REQUIRED_NAME      => 92,
-    NAMESPACE_RESOLVER => 123,
-    NAMESPACE          => 124,
-    SEMI_COLON         => 103,
-    USE_DECL           => 90,
-    USED_NAME          => 91,
-    REG_LIST           => 144,
-    REG_EXP            => 183,
-    LEFT_PAREN         => 104,
-    RIGHT_PAREN        => 105,
-    STRING             => 169,
-    RAW_STRING         => 170,
-    DOUBLE             => 168,
-    KEY                => 119,
+    REQUIRE_DECL       => 65,
+    REQUIRED_NAME      => 89,
+    NAMESPACE_RESOLVER => 119,
+    NAMESPACE          => 120,
+    SEMI_COLON         => 100,
+    USE_DECL           => 87,
+    USED_NAME          => 88,
+    REG_LIST           => 140,
+    REG_EXP            => 179,
+    LEFT_PAREN         => 101,
+    RIGHT_PAREN        => 102,
+    STRING             => 165,
+    RAW_STRING         => 166,
+    DOUBLE             => 164,
+    KEY                => 115,
 };
 
 1;
