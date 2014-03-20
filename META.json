@@ -38,6 +38,7 @@
             "Perl::PrereqScanner" : "0",
             "Test::CPAN::Meta" : "0",
             "Test::MinimumVersion" : "0.10108",
+            "Test::Perl::Critic" : "0",
             "Test::Pod" : "1.41",
             "Test::Spellunker" : "v0.2.7",
             "autodie" : "0"
@@ -45,7 +46,7 @@
       },
       "runtime" : {
          "requires" : {
-            "Compiler::Lexer" : "0",
+            "Compiler::Lexer" : "0.17",
             "Module::Path" : "0",
             "parent" : "0",
             "perl" : "5.008005"
