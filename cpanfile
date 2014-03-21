@@ -18,4 +18,5 @@ on develop => sub {
     requires 'Perl::PrereqScanner';
     requires 'autodie';
     requires 'Test::Perl::Critic';
+    requires 'Benchmark::Forking';
 };

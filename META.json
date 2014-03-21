@@ -35,6 +35,7 @@
       },
       "develop" : {
          "requires" : {
+            "Benchmark::Forking" : "0",
             "Perl::PrereqScanner" : "0",
             "Test::CPAN::Meta" : "0",
             "Test::MinimumVersion" : "0.10108",
