@@ -84,7 +84,7 @@ sub _scan {
             # e.g.
             #   require Foo;
             if ($token_type == REQUIRED_NAME) {
-                $self->{module_reqs}->add_minimum($token->{data} => 0);
+                $self->_add_minimum($token->{data} => 0);
 
                 $is_in_reqdecl = 0;
                 next;
@@ -103,7 +103,7 @@ sub _scan {
                     next;
                 }
 
-                $self->{module_reqs}->add_minimum($module_name => 0);
+                $self->_add_minimum($module_name => 0);
 
                 $module_name   = '';
                 $is_in_reqdecl = 0;
@@ -140,7 +140,7 @@ sub _scan {
             # End of declare of use statement
             if ($token_type == SEMI_COLON) {
                 if ($module_name) {
-                    $self->{module_reqs}->add_minimum($module_name => $module_version);
+                    $self->_add_minimum($module_name => $module_version);
                 }
 
                 $module_name    = '';
@@ -165,7 +165,7 @@ sub _scan {
                 elsif ($is_in_reglist) {
                     if ($token_type == REG_EXP) {
                         for my $_module_name (split /\s+/, $token->{data}) {
-                            $self->{module_reqs}->add_minimum($_module_name => 0);
+                            $self->_add_minimum($_module_name => 0);
                         }
                         $is_in_reglist = 0;
                     }
@@ -182,7 +182,7 @@ sub _scan {
                 }
                 elsif ($is_in_list) {
                     if ($token_type == STRING || $token_type == RAW_STRING) {
-                        $self->{module_reqs}->add_minimum($token->{data} => 0);
+                        $self->_add_minimum($token->{data} => 0);
                     }
                 }
 
@@ -190,7 +190,7 @@ sub _scan {
                 # e.g.
                 #   use parent "Foo"
                 elsif ($token_type == STRING || $token_type == RAW_STRING) {
-                    $self->{module_reqs}->add_minimum($token->{data} => 0);
+                    $self->_add_minimum($token->{data} => 0);
                 }
 
                 next;
@@ -203,7 +203,7 @@ sub _scan {
                         # e.g.
                         #   use 5.012;
                         my $perl_version = $token->{data};
-                        $self->{module_reqs}->add_minimum('perl' => $perl_version);
+                        $self->_add_minimum('perl' => $perl_version);
                         $is_in_usedecl = 0;
                     }
                 }
@@ -230,6 +230,14 @@ sub _scan {
     }
 
     return $self->{module_reqs};
+}
+
+sub _add_minimum {
+    my ($self, $module_name, $module_version) = @_;
+
+    if ($module_name) {
+        $self->{module_reqs}->add_minimum($module_name => $module_version);
+    }
 }
 
 1;
