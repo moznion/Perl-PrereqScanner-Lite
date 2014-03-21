@@ -2,6 +2,10 @@ Revision history for Perl extension Perl-PrereqScanner-Lite
 
 {{$NEXT}}
 
+0.12 2014-03-21T14:35:16Z
+
+    - Fix the handling of `use constant`
+
 0.11 2014-03-21T13:44:07Z
 
     - Bug fix
