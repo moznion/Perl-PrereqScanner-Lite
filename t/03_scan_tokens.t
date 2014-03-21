@@ -13,12 +13,12 @@ use Test::More;
 use Test::Deep;
 
 my $lexer = Compiler::Lexer->new;
-my $tokens = $lexer->tokenize(t::Util::slurp(catfile($FindBin::Bin, 'resources', 'foo.pl')));
+my $tokens = $lexer->tokenize(slurp(catfile($FindBin::Bin, 'resources', 'foo.pl')));
 
 my $scanner = Perl::PrereqScanner::Lite->new;
 
 my $got = $scanner->scan_tokens($tokens);
-cmp_deeply($got, {
+cmp_deeply(get_reqs_hash($got), {
     'strict'       => 0,
     'warnings'     => 0,
     'parent'       => 0,

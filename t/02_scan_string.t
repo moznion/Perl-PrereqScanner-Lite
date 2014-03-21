@@ -13,8 +13,8 @@ use Test::Deep;
 
 my $scanner = Perl::PrereqScanner::Lite->new;
 
-my $got = $scanner->scan_string(t::Util::slurp(catfile($FindBin::Bin, 'resources', 'foo.pl')));
-cmp_deeply($got, {
+my $got = $scanner->scan_string(slurp(catfile($FindBin::Bin, 'resources', 'foo.pl')));
+cmp_deeply(get_reqs_hash($got), {
     'strict'       => 0,
     'warnings'     => 0,
     'parent'       => 0,

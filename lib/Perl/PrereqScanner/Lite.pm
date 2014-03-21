@@ -3,6 +3,7 @@ use 5.008005;
 use strict;
 use warnings;
 use Compiler::Lexer;
+use CPAN::Meta::Requirements;
 use Perl::PrereqScanner::Lite::Constants;
 
 our $VERSION = "0.01";
@@ -13,7 +14,7 @@ sub new {
     bless {
         lexer          => Compiler::Lexer->new,
         extra_scanners => [],
-        modules        => {},
+        module_reqs    => CPAN::Meta::Requirements->new,
     }, $class;
 }
 
@@ -81,9 +82,7 @@ sub _scan {
             # e.g.
             #   require Foo;
             if ($token_type == REQUIRED_NAME) {
-                if (not defined $self->{modules}->{$token->{data}}) {
-                    $self->{modules}->{$token->{data}} = 0;
-                }
+                $self->{module_reqs}->add_minimum($token->{data} => 0);
 
                 $is_in_reqdecl = 0;
                 next;
@@ -102,9 +101,7 @@ sub _scan {
                     next;
                 }
 
-                if (not defined $self->{modules}->{$module_name}) {
-                    $self->{modules}->{$module_name} = 0;
-                }
+                $self->{module_reqs}->add_minimum($module_name => 0);
 
                 $module_name   = '';
                 $is_in_reqdecl = 0;
@@ -140,9 +137,7 @@ sub _scan {
 
             # End of declare of use statement
             if ($token_type == SEMI_COLON) {
-                if (!$self->{modules}->{$module_name} || $self->{modules}->{$module_name} < $module_version) {
-                    $self->{modules}->{$module_name} = $module_version;
-                }
+                $self->{module_reqs}->add_minimum($module_name => $module_version);
 
                 $module_name    = '';
                 $module_version = 0;
@@ -165,9 +160,7 @@ sub _scan {
                 elsif ($is_in_reglist) {
                     if ($token_type == REG_EXP) {
                         for my $_module_name (split /\s+/, $token->data) {
-                            if (not defined $self->{modules}->{$_module_name}) {
-                                $self->{modules}->{$_module_name} = 0;
-                            }
+                            $self->{module_reqs}->add_minimum($_module_name => 0);
                         }
                         $is_in_reglist = 0;
                     }
@@ -184,9 +177,7 @@ sub _scan {
                 }
                 elsif ($is_in_list) {
                     if ($token_type == STRING || $token_type == RAW_STRING) {
-                        if (not defined $self->{modules}->{$token->data}) {
-                            $self->{modules}->{$token->data} = 0;
-                        }
+                        $self->{module_reqs}->add_minimum($token->data => 0);
                     }
                 }
 
@@ -194,7 +185,7 @@ sub _scan {
                 # e.g.
                 #   use parent "Foo"
                 elsif ($token_type == STRING || $token_type == RAW_STRING) {
-                    $self->{modules}->{$token->data} = 0;
+                    $self->{module_reqs}->add_minimum($token->data => 0);
                 }
 
                 next;
@@ -206,9 +197,7 @@ sub _scan {
                     # e.g.
                     #   use 5.012;
                     my $perl_version = $token->data;
-                    if (!$self->{modules}->{perl} || $self->{modules}->{perl} < $perl_version) {
-                        $self->{modules}->{perl} = $perl_version;
-                    }
+                    $self->{module_reqs}->add_minimum('perl' => $perl_version);
                     $is_in_usedecl = 0;
                 }
                 else {
@@ -233,7 +222,7 @@ sub _scan {
         }
     }
 
-    return $self->{modules};
+    return $self->{module_reqs};
 }
 
 1;

@@ -23,9 +23,7 @@ sub scan {
         if ($c->{is_in_extends_reglist}) {
             if ($token_type == REG_EXP) {
                 for my $_module_name (split /\s+/, $token->data) {
-                    if (not defined $c->{modules}->{$_module_name}) {
-                        $c->{modules}->{$_module_name} = 0;
-                    }
+                    $c->{module_reqs}->add_minimum($_module_name => 0);
                 }
                 $c->{is_in_extends_reglist} = 0;
             }
@@ -45,9 +43,7 @@ sub scan {
         }
         if ($c->{is_in_extends_list}) {
             if ($token_type == STRING || $token_type == RAW_STRING) {
-                if (not defined $c->{modules}->{$token->data}) {
-                    $c->{modules}->{$token->data} = 0;
-                }
+                $c->{module_reqs}->add_minimum($token->data => 0);
             }
             return 1;
         }
@@ -56,7 +52,7 @@ sub scan {
         # e.g.
         #   extends "Foo"
         if ($token_type == STRING || $token_type == RAW_STRING) {
-            $c->{modules}->{$token->data} = 0;
+            $c->{module_reqs}->add_minimum($token->data => 0);
             return 1;
         }
 

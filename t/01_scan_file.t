@@ -7,13 +7,14 @@ use FindBin;
 use File::Spec::Functions qw/catfile/;
 use Perl::PrereqScanner::Lite;
 
+use t::Util;
 use Test::More;
 use Test::Deep;
 
 my $scanner = Perl::PrereqScanner::Lite->new;
 
 my $got = $scanner->scan_file(catfile($FindBin::Bin, 'resources', 'foo.pl'));
-cmp_deeply($got, {
+cmp_deeply(get_reqs_hash($got), {
     'strict'       => 0,
     'warnings'     => 0,
     'parent'       => 0,
