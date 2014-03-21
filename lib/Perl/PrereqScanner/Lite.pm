@@ -6,7 +6,7 @@ use Compiler::Lexer;
 use CPAN::Meta::Requirements;
 use Perl::PrereqScanner::Lite::Constants;
 
-our $VERSION = "0.01";
+our $VERSION = "0.10";
 
 sub new {
     my ($class) = @_;
@@ -257,11 +257,11 @@ Create scanner instance.
 
 =item * scan_file($file_path)
 
-Scan and figure out prereqs by file path.
+Scan and figure out prereqs which is instance of C<CPAN::Meta::Requirements> by file path.
 
 =item * scan_string($string)
 
-Scan and figure out prereqs by source code string written in perl.
+Scan and figure out prereqs which is instance of C<CPAN::Meta::Requirements> by source code string written in perl.
 
 e.g.
 
@@ -271,7 +271,7 @@ e.g.
 
 =item * scan_module($module_name)
 
-Scan and figure out prereqs by module name.
+Scan and figure out prereqs which is instance of C<CPAN::Meta::Requirements> by module name.
 
 e.g.
 
@@ -279,7 +279,7 @@ e.g.
 
 =item * scan_tokens($tokens)
 
-Scan and figure out prereqs by tokens of L<Compiler::Lexer>.
+Scan and figure out prereqs which is instance of C<CPAN::Meta::Requirements> by tokens of L<Compiler::Lexer>.
 
 e.g.
 

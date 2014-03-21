@@ -24,11 +24,11 @@ This scanner uses [Compiler::Lexer](https://metacpan.org/pod/Compiler::Lexer) as
 
 - scan\_file($file\_path)
 
-    Scan and figure out prereqs by file path.
+    Scan and figure out prereqs which is instance of `CPAN::Meta::Requirements` by file path.
 
 - scan\_string($string)
 
-    Scan and figure out prereqs by source code string written in perl.
+    Scan and figure out prereqs which is instance of `CPAN::Meta::Requirements` by source code string written in perl.
 
     e.g.
 
@@ -38,7 +38,7 @@ This scanner uses [Compiler::Lexer](https://metacpan.org/pod/Compiler::Lexer) as
 
 - scan\_module($module\_name)
 
-    Scan and figure out prereqs by module name.
+    Scan and figure out prereqs which is instance of `CPAN::Meta::Requirements` by module name.
 
     e.g.
 
@@ -46,7 +46,7 @@ This scanner uses [Compiler::Lexer](https://metacpan.org/pod/Compiler::Lexer) as
 
 - scan\_tokens($tokens)
 
-    Scan and figure out prereqs by tokens of [Compiler::Lexer](https://metacpan.org/pod/Compiler::Lexer).
+    Scan and figure out prereqs which is instance of `CPAN::Meta::Requirements` by tokens of [Compiler::Lexer](https://metacpan.org/pod/Compiler::Lexer).
 
     e.g.
 

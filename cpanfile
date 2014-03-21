@@ -1,4 +1,5 @@
 requires 'Compiler::Lexer', '0.17';
+requires 'CPAN::Meta::Requirements', '2.125';
 requires 'Module::Path';
 requires 'parent', 0;
 requires 'perl', '5.008005';
