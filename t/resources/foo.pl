@@ -1,13 +1,13 @@
 use if $] < 5.009_005, 'MRO::Compat';
+use Test::More tests => 4;
 
 use strict;
 use warnings;
 use Time::Local qw(timelocal);
 use Exporter ();
 use JSON 2 qw/encode_json/;
-use Test::More 0.9_8;
-use File::Temp 0.11 ();
-use File::Temp 0.12 ();
+use File::Temp 0.1_1 ();
+use File::Temp 0.1_2 ();
 use v5.8.1;
 use parent ("Fcntl", 'FileHandle');
 use parent qw/Env English/;

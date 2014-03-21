@@ -69,6 +69,7 @@ sub _scan {
     my $is_in_reqdecl = 0;
     my $is_inherited  = 0;
     my $is_in_list    = 0;
+    my $is_prev_module_name = 0;
 
     my $does_garbage_exist = 0;
 
@@ -127,6 +128,7 @@ sub _scan {
                 if ($module_name =~ /(?:base|parent)/) {
                     $is_inherited = 1;
                 }
+                $is_prev_module_name = 1;
                 next;
             }
 
@@ -134,6 +136,7 @@ sub _scan {
             #   use Foo::Bar;
             if ($token_type == NAMESPACE || $token_type == NAMESPACE_RESOLVER) {
                 $module_name .= $token->{data};
+                $is_prev_module_name = 1;
                 next;
             }
 
@@ -149,7 +152,8 @@ sub _scan {
                 $is_inherited   = 0;
                 $is_in_list     = 0;
                 $is_in_usedecl  = 0;
-                $does_garbage_exist = 0;
+                $does_garbage_exist  = 0;
+                $is_prev_module_name = 0;
 
                 next;
             }
@@ -193,6 +197,7 @@ sub _scan {
                     $self->_add_minimum($token->{data} => 0);
                 }
 
+                $is_prev_module_name = 0;
                 next;
             }
 
@@ -207,7 +212,7 @@ sub _scan {
                         $is_in_usedecl = 0;
                     }
                 }
-                else {
+                elsif($is_prev_module_name) {
                     # For module version
                     # e.g.
                     #   use Foo::Bar 0.0.1;'
@@ -215,10 +220,13 @@ sub _scan {
                     #   use Foo::Bar 0.0_1;
                     $module_version = $token->{data};
                 }
+
+                $is_prev_module_name = 0;
                 next;
             }
 
-            $does_garbage_exist = 1;
+            $is_prev_module_name = 0;
+            $does_garbage_exist  = 1;
             next;
         }
 
