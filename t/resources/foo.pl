@@ -17,6 +17,7 @@ use base ("Carp", 'Cwd');
 use base qw/Getopt::Long Getopt::Std/;
 use base "Pod::Checker";
 use base 'Pod::Find';
+use lib "$FinBin::Bin/../lib";
 require TieHash;
 require Text::Tabs;
 require "Text/Soundex.pm"; # <= should be ignored

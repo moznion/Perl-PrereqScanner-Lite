@@ -72,6 +72,7 @@ sub _scan {
     my $is_prev_module_name = 0;
 
     my $does_garbage_exist = 0;
+    my $does_use_lib = 0;
 
     for my $token (@$tokens) {
         my $token_type = $token->{type};
@@ -125,6 +126,12 @@ sub _scan {
             #   use parent qw/Foo/;
             if ($token_type == USED_NAME) {
                 $module_name = $token->{data};
+
+                if ($module_name eq 'lib') {
+                    $self->_add_minimum($module_name, 0);
+                    $does_use_lib = 1;
+                }
+
                 if ($module_name =~ /(?:base|parent)/) {
                     $is_inherited = 1;
                 }
@@ -142,7 +149,7 @@ sub _scan {
 
             # End of declare of use statement
             if ($token_type == SEMI_COLON) {
-                if ($module_name) {
+                if ($module_name && !$does_use_lib) {
                     $self->_add_minimum($module_name => $module_version);
                 }
 
@@ -152,6 +159,7 @@ sub _scan {
                 $is_inherited   = 0;
                 $is_in_list     = 0;
                 $is_in_usedecl  = 0;
+                $does_use_lib   = 0;
                 $does_garbage_exist  = 0;
                 $is_prev_module_name = 0;
 
