@@ -139,16 +139,9 @@ sub _scan {
                 next;
             }
 
-            # e.g.
-            #   use Foo::Bar;
-            if ($token_type == NAMESPACE || $token_type == NAMESPACE_RESOLVER) {
-                $module_name .= $token->{data};
-                $is_prev_module_name = 1;
-                next;
-            }
-
             # End of declare of use statement
-            if ($token_type == SEMI_COLON) {
+            if ($token_type == SEMI_COLON || $token->{data} eq ';') {
+                #                            ~~~~~~~~~~~~~~~~~~~~~ XXX Compiler::Lexer matter?
                 if ($module_name && !$does_use_lib) {
                     $self->_add_minimum($module_name => $module_version);
                 }
@@ -163,6 +156,14 @@ sub _scan {
                 $does_garbage_exist  = 0;
                 $is_prev_module_name = 0;
 
+                next;
+            }
+
+            # e.g.
+            #   use Foo::Bar;
+            if ($token_type == NAMESPACE || $token_type == NAMESPACE_RESOLVER) {
+                $module_name .= $token->{data};
+                $is_prev_module_name = 1;
                 next;
             }
 
