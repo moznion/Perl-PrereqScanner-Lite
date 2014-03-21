@@ -256,6 +256,7 @@ Perl::PrereqScanner::Lite - Lightweight Prereqs Scanner for Perl
 =head1 DESCRIPTION
 
 Perl::PrereqScanner::Lite is the lightweight prereqs scanner for perl.
+This scanner uses L<Compiler::Lexer> as tokenizer, therefore processing speed is really fast.
 
 =head1 METHODS
 
