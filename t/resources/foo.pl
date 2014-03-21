@@ -18,6 +18,7 @@ use base qw/Getopt::Long Getopt::Std/;
 use base "Pod::Checker";
 use base 'Pod::Find';
 use lib "$FinBin::Bin/../lib";
+use constant FOO => 'BAR';
 require TieHash;
 require Text::Tabs;
 require "Text/Soundex.pm"; # <= should be ignored

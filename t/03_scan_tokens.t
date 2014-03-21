@@ -24,6 +24,7 @@ cmp_deeply(get_reqs_hash($got), {
     'parent'       => 0,
     'base'         => 0,
     'lib'          => 0,
+    'constant'     => 0,
     'perl'         => 'v5.8.1',
     'Time::Local'  => 0,
     'Exporter'     => 0,

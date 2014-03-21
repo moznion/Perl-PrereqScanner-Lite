@@ -75,7 +75,7 @@ sub _scan {
     my $is_prev_module_name = 0;
 
     my $does_garbage_exist = 0;
-    my $does_use_lib = 0;
+    my $does_use_lib_or_constant = 0;
 
     TOP:
     for my $token (@$tokens) {
@@ -129,9 +129,9 @@ sub _scan {
             if ($token_type == USED_NAME) {
                 $module_name = $token->{data};
 
-                if ($module_name eq 'lib') {
+                if ($module_name eq 'lib' || $module_name eq 'constant') {
                     $self->_add_minimum($module_name, 0);
-                    $does_use_lib = 1;
+                    $does_use_lib_or_constant = 1;
                 }
 
                 if ($module_name =~ /(?:base|parent)/) {
@@ -144,7 +144,7 @@ sub _scan {
             # End of declare of use statement
             if ($token_type == SEMI_COLON || $token->{data} eq ';') {
                 #                            ~~~~~~~~~~~~~~~~~~~~~ XXX Compiler::Lexer matter?
-                if ($module_name && !$does_use_lib) {
+                if ($module_name && !$does_use_lib_or_constant) {
                     $self->_add_minimum($module_name => $module_version);
                 }
 
@@ -154,9 +154,9 @@ sub _scan {
                 $is_inherited   = 0;
                 $is_in_list     = 0;
                 $is_in_usedecl  = 0;
-                $does_use_lib   = 0;
                 $does_garbage_exist  = 0;
                 $is_prev_module_name = 0;
+                $does_use_lib_or_constant = 0;
 
                 next;
             }
