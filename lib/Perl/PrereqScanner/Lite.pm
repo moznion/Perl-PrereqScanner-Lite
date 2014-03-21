@@ -61,7 +61,7 @@ sub scan_module {
 sub _scan {
     my ($self, $tokens) = @_;
 
-    my $module_name    = 0;
+    my $module_name    = '';
     my $module_version = 0;
 
     my $is_in_reglist = 0;
@@ -69,6 +69,8 @@ sub _scan {
     my $is_in_reqdecl = 0;
     my $is_inherited  = 0;
     my $is_in_list    = 0;
+
+    my $does_garbage_exist = 0;
 
     for my $token (@$tokens) {
         my $token_type = $token->{type};
@@ -137,7 +139,9 @@ sub _scan {
 
             # End of declare of use statement
             if ($token_type == SEMI_COLON) {
-                $self->{module_reqs}->add_minimum($module_name => $module_version);
+                if ($module_name) {
+                    $self->{module_reqs}->add_minimum($module_name => $module_version);
+                }
 
                 $module_name    = '';
                 $module_version = 0;
@@ -145,6 +149,7 @@ sub _scan {
                 $is_inherited   = 0;
                 $is_in_list     = 0;
                 $is_in_usedecl  = 0;
+                $does_garbage_exist = 0;
 
                 next;
             }
@@ -159,7 +164,7 @@ sub _scan {
                 }
                 elsif ($is_in_reglist) {
                     if ($token_type == REG_EXP) {
-                        for my $_module_name (split /\s+/, $token->data) {
+                        for my $_module_name (split /\s+/, $token->{data}) {
                             $self->{module_reqs}->add_minimum($_module_name => 0);
                         }
                         $is_in_reglist = 0;
@@ -177,7 +182,7 @@ sub _scan {
                 }
                 elsif ($is_in_list) {
                     if ($token_type == STRING || $token_type == RAW_STRING) {
-                        $self->{module_reqs}->add_minimum($token->data => 0);
+                        $self->{module_reqs}->add_minimum($token->{data} => 0);
                     }
                 }
 
@@ -185,7 +190,7 @@ sub _scan {
                 # e.g.
                 #   use parent "Foo"
                 elsif ($token_type == STRING || $token_type == RAW_STRING) {
-                    $self->{module_reqs}->add_minimum($token->data => 0);
+                    $self->{module_reqs}->add_minimum($token->{data} => 0);
                 }
 
                 next;
@@ -193,12 +198,14 @@ sub _scan {
 
             if ($token_type == DOUBLE || $token_type == INT || $token_type == VERSION_STRING) {
                 if (!$module_name) {
-                    # For perl version
-                    # e.g.
-                    #   use 5.012;
-                    my $perl_version = $token->data;
-                    $self->{module_reqs}->add_minimum('perl' => $perl_version);
-                    $is_in_usedecl = 0;
+                    if (!$does_garbage_exist) {
+                        # For perl version
+                        # e.g.
+                        #   use 5.012;
+                        my $perl_version = $token->{data};
+                        $self->{module_reqs}->add_minimum('perl' => $perl_version);
+                        $is_in_usedecl = 0;
+                    }
                 }
                 else {
                     # For module version
@@ -206,12 +213,12 @@ sub _scan {
                     #   use Foo::Bar 0.0.1;'
                     #   use Foo::Bar v0.0.1;
                     #   use Foo::Bar 0.0_1;
-                    $module_version = $token->data;
+                    $module_version = $token->{data};
                 }
-
                 next;
             }
 
+            $does_garbage_exist = 1;
             next;
         }
 

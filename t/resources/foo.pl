@@ -1,3 +1,5 @@
+use if $] < 5.009_005, 'MRO::Compat';
+
 use strict;
 use warnings;
 use Time::Local qw(timelocal);
@@ -18,5 +20,6 @@ use base 'Pod::Find';
 require TieHash;
 require Text::Tabs;
 require "Text/Soundex.pm"; # <= should be ignored
+
 
 1;
