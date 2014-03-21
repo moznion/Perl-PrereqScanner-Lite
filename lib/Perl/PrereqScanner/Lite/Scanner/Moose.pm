@@ -76,7 +76,7 @@ sub scan {
 
 =head1 NAME
 
-Perl::PrereqScanner::Lite::Scanner::Moose - Extra Scanner for Perl::PrereqScanner::Lite
+Perl::PrereqScanner::Lite::Scanner::Moose - Extra Perl::PrereqScanner::Lite Scanner for Moose Family
 
 =head1 SYNOPSIS
 
