@@ -59,8 +59,10 @@ This scanner uses [Compiler::Lexer](https://metacpan.org/pod/Compiler::Lexer) as
 
     Add extra scanner to scan and figure out prereqs. This module loads extra scanner such as `Perl::PrereqScanner::Lite::Scanner::$scanner_name` if specifying scanner name through this method.
 
-    Now this module supports extra scanner for [Moose](https://metacpan.org/pod/Moose) families `extends` notation.
-    Please see also [Perl::PrereqScanner::Lite::Scanner::Moose](https://metacpan.org/pod/Perl::PrereqScanner::Lite::Scanner::Moose).
+    Extra scanners that are default supported are followings;
+
+    - [Perl::PrereqScanner::Lite::Scanner::Moose](https://metacpan.org/pod/Perl::PrereqScanner::Lite::Scanner::Moose)
+    - [Perl::PrereqScanner::Lite::Scanner::Version](https://metacpan.org/pod/Perl::PrereqScanner::Lite::Scanner::Version)
 
 # SEE ALSO
 

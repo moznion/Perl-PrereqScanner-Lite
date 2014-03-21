@@ -2,6 +2,10 @@ Revision history for Perl extension Perl-PrereqScanner-Lite
 
 {{$NEXT}}
 
+0.11 2014-03-21T13:44:07Z
+
+    - Bug fix
+
 0.10 2014-03-21T09:43:52Z
 
     - Change data representation format of prereqs
