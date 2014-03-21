@@ -9,7 +9,7 @@ use parent qw(Exporter);
 our @EXPORT = qw(
     REQUIRE_DECL REQUIRED_NAME NAMESPACE_RESOLVER NAMESPACE
     SEMI_COLON USE_DECL USED_NAME REG_LIST REG_EXP LEFT_PAREN
-    RIGHT_PAREN STRING RAW_STRING DOUBLE KEY
+    RIGHT_PAREN STRING RAW_STRING VERSION_STRING INT DOUBLE KEY
 );
 
 use constant {
@@ -26,6 +26,8 @@ use constant {
     RIGHT_PAREN        => Compiler::Lexer::TokenType::T_RightParenthesis,
     STRING             => Compiler::Lexer::TokenType::T_String,
     RAW_STRING         => Compiler::Lexer::TokenType::T_RawString,
+    VERSION_STRING     => Compiler::Lexer::TokenType::T_VersionString,
+    INT                => Compiler::Lexer::TokenType::T_Int,
     DOUBLE             => Compiler::Lexer::TokenType::T_Double,
     KEY                => Compiler::Lexer::TokenType::T_Key,
 };

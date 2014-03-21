@@ -191,7 +191,7 @@ sub _scan {
                 next;
             }
 
-            if ($token_type == STRING || $token_type == RAW_STRING || $token_type == DOUBLE) {
+            if ($token_type == DOUBLE || $token_type == INT || $token_type == VERSION_STRING) {
                 if (!$module_name) {
                     # For perl version
                     # e.g.
@@ -203,10 +203,10 @@ sub _scan {
                 else {
                     # For module version
                     # e.g.
-                    #   use Foo::Bar '0.0.1';
-                    if ($token->data =~ /\d+(\.\d+)*/) {
-                        $module_version = $token->data;
-                    }
+                    #   use Foo::Bar 0.0.1;'
+                    #   use Foo::Bar v0.0.1;
+                    #   use Foo::Bar 0.0_1;
+                    $module_version = $token->data;
                 }
 
                 next;
