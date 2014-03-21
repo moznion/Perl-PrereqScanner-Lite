@@ -64,16 +64,20 @@ sub _scan {
     my $module_name    = '';
     my $module_version = 0;
 
-    my $is_in_reglist = 0;
-    my $is_in_usedecl = 0;
-    my $is_in_reqdecl = 0;
-    my $is_inherited  = 0;
-    my $is_in_list    = 0;
+    my $not_decl_module_name = '';
+
+    my $is_in_reglist   = 0;
+    my $is_in_usedecl   = 0;
+    my $is_in_reqdecl   = 0;
+    my $is_inherited    = 0;
+    my $is_in_list      = 0;
+    my $is_version_decl = 0;
     my $is_prev_module_name = 0;
 
     my $does_garbage_exist = 0;
     my $does_use_lib = 0;
 
+    TOP:
     for my $token (@$tokens) {
         my $token_type = $token->{type};
 
@@ -101,11 +105,9 @@ sub _scan {
 
             # End of declare of require statement
             if ($token_type == SEMI_COLON) {
-                unless ($module_name) {
-                    next;
+                if ($module_name) {
+                    $self->_add_minimum($module_name => 0);
                 }
-
-                $self->_add_minimum($module_name => 0);
 
                 $module_name   = '';
                 $is_in_reqdecl = 0;
@@ -241,9 +243,36 @@ sub _scan {
 
         for my $extra_scanner (@{$self->{extra_scanners}}) {
             if ($extra_scanner->scan($self, $token, $token_type)) {
-                last;
+                next TOP;
             }
         }
+
+        # For Foo::Bar->VERSION(x.xx);
+        {
+            if ($token_type == KEY || $token_type == NAMESPACE || $token_type == NAMESPACE_RESOLVER) {
+                $not_decl_module_name .= $token->{data};
+                next;
+            }
+
+            if ($token_type == METHOD && $token->{data} eq 'VERSION') {
+                $is_version_decl = 1;
+                next;
+            }
+
+            if ($is_version_decl && $token_type == INT || $token_type == DOUBLE || $token_type == VERSION_STRING) {
+                $self->_add_minimum($not_decl_module_name => $token->{data});
+                $is_version_decl = 0;
+                $not_decl_module_name = '';
+                next;
+            }
+
+            if ($token_type == SEMI_COLON) {
+                $is_version_decl = 0;
+                $not_decl_module_name = '';
+                next;
+            }
+        }
+
     }
 
     return $self->{module_reqs};

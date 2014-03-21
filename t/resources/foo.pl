@@ -22,5 +22,7 @@ require TieHash;
 require Text::Tabs;
 require "Text/Soundex.pm"; # <= should be ignored
 
+TieHash->VERSION(1.00);
+Text::Tabs->VERSION(v1.0.0);
 
 1;

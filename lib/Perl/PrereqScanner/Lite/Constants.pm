@@ -10,6 +10,7 @@ our @EXPORT = qw(
     REQUIRE_DECL REQUIRED_NAME NAMESPACE_RESOLVER NAMESPACE
     SEMI_COLON USE_DECL USED_NAME REG_LIST REG_EXP LEFT_PAREN
     RIGHT_PAREN STRING RAW_STRING VERSION_STRING INT DOUBLE KEY
+    METHOD
 );
 
 use constant {
@@ -30,6 +31,7 @@ use constant {
     INT                => Compiler::Lexer::TokenType::T_Int,
     DOUBLE             => Compiler::Lexer::TokenType::T_Double,
     KEY                => Compiler::Lexer::TokenType::T_Key,
+    METHOD             => Compiler::Lexer::TokenType::T_Method,
 };
 
 1;
