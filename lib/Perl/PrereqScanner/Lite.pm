@@ -246,33 +246,6 @@ sub _scan {
                 next TOP;
             }
         }
-
-        # For Foo::Bar->VERSION(x.xx);
-        {
-            if ($token_type == KEY || $token_type == NAMESPACE || $token_type == NAMESPACE_RESOLVER) {
-                $not_decl_module_name .= $token->{data};
-                next;
-            }
-
-            if ($token_type == METHOD && $token->{data} eq 'VERSION') {
-                $is_version_decl = 1;
-                next;
-            }
-
-            if ($is_version_decl && $token_type == INT || $token_type == DOUBLE || $token_type == VERSION_STRING) {
-                $self->_add_minimum($not_decl_module_name => $token->{data});
-                $is_version_decl = 0;
-                $not_decl_module_name = '';
-                next;
-            }
-
-            if ($token_type == SEMI_COLON) {
-                $is_version_decl = 0;
-                $not_decl_module_name = '';
-                next;
-            }
-        }
-
     }
 
     return $self->{module_reqs};
@@ -353,8 +326,15 @@ e.g.
 
 Add extra scanner to scan and figure out prereqs. This module loads extra scanner such as C<Perl::PrereqScanner::Lite::Scanner::$scanner_name> if specifying scanner name through this method.
 
-Now this module supports extra scanner for L<Moose> families C<extends> notation.
-Please see also L<Perl::PrereqScanner::Lite::Scanner::Moose>.
+Extra scanners that are default supported are followings;
+
+=over 8
+
+=item * L<Perl::PrereqScanner::Lite::Scanner::Moose>
+
+=item * L<Perl::PrereqScanner::Lite::Scanner::Version>
+
+=back
 
 =back
 
