@@ -2,6 +2,7 @@ package Perl::PrereqScanner::Lite::Constants;
 use strict;
 use warnings;
 use utf8;
+use Compiler::Lexer::Constants;
 
 use parent qw(Exporter);
 
@@ -12,21 +13,21 @@ our @EXPORT = qw(
 );
 
 use constant {
-    REQUIRE_DECL       => 65,
-    REQUIRED_NAME      => 89,
-    NAMESPACE_RESOLVER => 119,
-    NAMESPACE          => 120,
-    SEMI_COLON         => 100,
-    USE_DECL           => 87,
-    USED_NAME          => 88,
-    REG_LIST           => 140,
-    REG_EXP            => 179,
-    LEFT_PAREN         => 101,
-    RIGHT_PAREN        => 102,
-    STRING             => 165,
-    RAW_STRING         => 166,
-    DOUBLE             => 164,
-    KEY                => 115,
+    REQUIRE_DECL       => Compiler::Lexer::TokenType::T_RequireDecl,
+    REQUIRED_NAME      => Compiler::Lexer::TokenType::T_RequiredName,
+    NAMESPACE_RESOLVER => Compiler::Lexer::TokenType::T_NamespaceResolver,
+    NAMESPACE          => Compiler::Lexer::TokenType::T_Namespace,
+    SEMI_COLON         => Compiler::Lexer::TokenType::T_SemiColon,
+    USE_DECL           => Compiler::Lexer::TokenType::T_UseDecl,
+    USED_NAME          => Compiler::Lexer::TokenType::T_UsedName,
+    REG_LIST           => Compiler::Lexer::TokenType::T_RegList,
+    REG_EXP            => Compiler::Lexer::TokenType::T_RegExp,
+    LEFT_PAREN         => Compiler::Lexer::TokenType::T_LeftParenthesis,
+    RIGHT_PAREN        => Compiler::Lexer::TokenType::T_RightParenthesis,
+    STRING             => Compiler::Lexer::TokenType::T_String,
+    RAW_STRING         => Compiler::Lexer::TokenType::T_RawString,
+    DOUBLE             => Compiler::Lexer::TokenType::T_Double,
+    KEY                => Compiler::Lexer::TokenType::T_Key,
 };
 
 1;
