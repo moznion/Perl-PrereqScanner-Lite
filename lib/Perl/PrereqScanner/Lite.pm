@@ -143,7 +143,8 @@ sub _scan {
 
             # End of declare of use statement
             if ($token_type == SEMI_COLON || $token->{data} eq ';') {
-                #                            ~~~~~~~~~~~~~~~~~~~~~ XXX Compiler::Lexer matter?
+                #                            ~~~~~~~~~~~~~~~~~~~~~ XXX This problem fixed at https://github.com/goccy/p5-Compiler-Lexer/commit/248c63b6ebf8234657f775e8bd76760af3d00134
+                #                                                  But it has not released yet (in 2014-03-23).
                 if ($module_name && !$does_use_lib_or_constant) {
                     $self->_add_minimum($module_name => $module_version);
                 }
