@@ -12,7 +12,7 @@ sub new {
     my ($class) = @_;
 
     bless {
-        lexer          => Compiler::Lexer->new,
+        lexer          => Compiler::Lexer->new({verbose => 1}),
         extra_scanners => [],
         module_reqs    => CPAN::Meta::Requirements->new,
     }, $class;
@@ -77,6 +77,8 @@ sub _scan {
     my $does_garbage_exist = 0;
     my $does_use_lib_or_constant = 0;
 
+    my $latest_prereq = '';
+
     TOP:
     for my $token (@$tokens) {
         my $token_type = $token->{type};
@@ -90,7 +92,7 @@ sub _scan {
             # e.g.
             #   require Foo;
             if ($token_type == REQUIRED_NAME) {
-                $self->_add_minimum($token->{data} => 0);
+                $latest_prereq = $self->_add_minimum($token->{data} => 0);
 
                 $is_in_reqdecl = 0;
                 next;
@@ -106,7 +108,7 @@ sub _scan {
             # End of declare of require statement
             if ($token_type == SEMI_COLON) {
                 if ($module_name) {
-                    $self->_add_minimum($module_name => 0);
+                    $latest_prereq = $self->_add_minimum($module_name => 0);
                 }
 
                 $module_name   = '';
@@ -130,7 +132,7 @@ sub _scan {
                 $module_name = $token->{data};
 
                 if ($module_name eq 'lib' || $module_name eq 'constant') {
-                    $self->_add_minimum($module_name, 0);
+                    $latest_prereq = $self->_add_minimum($module_name, 0);
                     $does_use_lib_or_constant = 1;
                 }
 
@@ -146,7 +148,7 @@ sub _scan {
                 #                            ~~~~~~~~~~~~~~~~~~~~~ XXX This problem fixed at https://github.com/goccy/p5-Compiler-Lexer/commit/248c63b6ebf8234657f775e8bd76760af3d00134
                 #                                                  But it has not released yet (in 2014-03-23).
                 if ($module_name && !$does_use_lib_or_constant) {
-                    $self->_add_minimum($module_name => $module_version);
+                    $latest_prereq = $self->_add_minimum($module_name => $module_version);
                 }
 
                 $module_name    = '';
@@ -181,7 +183,7 @@ sub _scan {
                 elsif ($is_in_reglist) {
                     if ($token_type == REG_EXP) {
                         for my $_module_name (split /\s+/, $token->{data}) {
-                            $self->_add_minimum($_module_name => 0);
+                            $latest_prereq = $self->_add_minimum($_module_name => 0);
                         }
                         $is_in_reglist = 0;
                     }
@@ -198,7 +200,7 @@ sub _scan {
                 }
                 elsif ($is_in_list) {
                     if ($token_type == STRING || $token_type == RAW_STRING) {
-                        $self->_add_minimum($token->{data} => 0);
+                        $latest_prereq = $self->_add_minimum($token->{data} => 0);
                     }
                 }
 
@@ -206,7 +208,7 @@ sub _scan {
                 # e.g.
                 #   use parent "Foo"
                 elsif ($token_type == STRING || $token_type == RAW_STRING) {
-                    $self->_add_minimum($token->{data} => 0);
+                    $latest_prereq = $self->_add_minimum($token->{data} => 0);
                 }
 
                 $is_prev_module_name = 0;
@@ -220,7 +222,7 @@ sub _scan {
                         # e.g.
                         #   use 5.012;
                         my $perl_version = $token->{data};
-                        $self->_add_minimum('perl' => $perl_version);
+                        $latest_prereq = $self->_add_minimum('perl' => $perl_version);
                         $is_in_usedecl = 0;
                     }
                 }
@@ -237,8 +239,10 @@ sub _scan {
                 next;
             }
 
-            $is_prev_module_name = 0;
-            $does_garbage_exist  = 1;
+            if ($token_type != WHITESPACE) {
+                $does_garbage_exist  = 1;
+                $is_prev_module_name = 0;
+            }
             next;
         }
 
@@ -246,6 +250,11 @@ sub _scan {
             if ($extra_scanner->scan($self, $token, $token_type)) {
                 next TOP;
             }
+        }
+
+        if ($token_type == COMMENT && $token->{data} =~ /\A##\s*no prereq\Z/) {
+            $self->{module_reqs}->clear_requirement($latest_prereq);
+            next;
         }
     }
 
@@ -258,6 +267,8 @@ sub _add_minimum {
     if ($module_name) {
         $self->{module_reqs}->add_minimum($module_name => $module_version);
     }
+
+    return $module_name;
 }
 
 1;
