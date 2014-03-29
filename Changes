@@ -2,6 +2,10 @@ Revision history for Perl extension Perl-PrereqScanner-Lite
 
 {{$NEXT}}
 
+0.14 2014-03-29T04:44:12Z
+
+    - Change "## no prereq" to be option
+
 0.13 2014-03-29T03:49:54Z
 
     - Support "## no prereq" comment
