@@ -23,5 +23,7 @@ require TieHash;
 require Text::Tabs;
 require "Text/Soundex.pm"; # <= should be ignored
 
+use Sys::Syslog; ## no prereq
+
 1;
 
