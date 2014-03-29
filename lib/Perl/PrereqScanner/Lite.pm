@@ -9,10 +9,18 @@ use Perl::PrereqScanner::Lite::Constants;
 our $VERSION = "0.13";
 
 sub new {
-    my ($class) = @_;
+    my ($class, $opt) = @_;
+
+    my $lexer;
+    if ($opt->{no_prereq}) {
+        $lexer = Compiler::Lexer->new({verbose => 1}),
+    }
+    else {
+        $lexer = Compiler::Lexer->new(),
+    }
 
     bless {
-        lexer          => Compiler::Lexer->new({verbose => 1}),
+        lexer          => $lexer,
         extra_scanners => [],
         module_reqs    => CPAN::Meta::Requirements->new,
     }, $class;

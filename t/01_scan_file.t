@@ -11,7 +11,7 @@ use t::Util;
 use Test::More;
 use Test::Deep;
 
-my $scanner = Perl::PrereqScanner::Lite->new;
+my $scanner = Perl::PrereqScanner::Lite->new({no_prereq => 1});
 
 my $got = $scanner->scan_file(catfile($FindBin::Bin, 'resources', 'foo.pl'));
 cmp_deeply(get_reqs_hash($got), {
