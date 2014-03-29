@@ -12,7 +12,7 @@ sub new {
     my ($class) = @_;
 
     bless {
-        lexer          => Compiler::Lexer->new,
+        lexer          => Compiler::Lexer->new({verbose => 1}),
         extra_scanners => [],
         module_reqs    => CPAN::Meta::Requirements->new,
     }, $class;
@@ -237,8 +237,10 @@ sub _scan {
                 next;
             }
 
-            $is_prev_module_name = 0;
-            $does_garbage_exist  = 1;
+            if ($token_type != WHITESPACE) {
+                $does_garbage_exist  = 1;
+                $is_prev_module_name = 0;
+            }
             next;
         }
 
