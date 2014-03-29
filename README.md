@@ -64,6 +64,17 @@ This scanner uses [Compiler::Lexer](https://metacpan.org/pod/Compiler::Lexer) as
     - [Perl::PrereqScanner::Lite::Scanner::Moose](https://metacpan.org/pod/Perl::PrereqScanner::Lite::Scanner::Moose)
     - [Perl::PrereqScanner::Lite::Scanner::Version](https://metacpan.org/pod/Perl::PrereqScanner::Lite::Scanner::Version)
 
+# ADDITIONAL NOTATION
+
+This module recognize `## no prereq` optional comment. The requiring declaration with this comment on the same line will be ignored as prereq.
+
+For example
+
+    use Foo;
+    use Bar; ## no prereq
+
+In this case `Foo` is the prereq, however `Bar` is ignored.
+
 # SEE ALSO
 
 [Perl::PrereqScanner](https://metacpan.org/pod/Perl::PrereqScanner), [Compiler::Lexer](https://metacpan.org/pod/Compiler::Lexer)

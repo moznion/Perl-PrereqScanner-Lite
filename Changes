@@ -2,6 +2,10 @@ Revision history for Perl extension Perl-PrereqScanner-Lite
 
 {{$NEXT}}
 
+0.13 2014-03-29T03:49:54Z
+
+    - Support "## no prereq" comment
+
 0.12 2014-03-21T14:35:16Z
 
     - Fix the handling of `use constant`
