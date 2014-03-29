@@ -6,7 +6,7 @@ use Compiler::Lexer;
 use CPAN::Meta::Requirements;
 use Perl::PrereqScanner::Lite::Constants;
 
-our $VERSION = "0.12";
+our $VERSION = "0.13";
 
 sub new {
     my ($class) = @_;
@@ -349,6 +349,17 @@ Extra scanners that are default supported are followings;
 =back
 
 =back
+
+=head1 ADDITIONAL NOTATION
+
+This module recognize C<## no prereq> optional comment. The requiring declaration with this comment on the same line will be ignored as prereq.
+
+For example
+
+    use Foo;
+    use Bar; ## no prereq
+
+In this case C<Foo> is the prereq, however C<Bar> is ignored.
 
 =head1 SEE ALSO
 
