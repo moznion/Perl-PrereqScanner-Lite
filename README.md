@@ -18,7 +18,7 @@ This scanner uses [Compiler::Lexer](https://metacpan.org/pod/Compiler::Lexer) as
 
 # METHODS
 
-- new
+- new($opt)
 
     Create scanner instance.
 
@@ -66,7 +66,8 @@ This scanner uses [Compiler::Lexer](https://metacpan.org/pod/Compiler::Lexer) as
 
 # ADDITIONAL NOTATION
 
-This module recognize `## no prereq` optional comment. The requiring declaration with this comment on the same line will be ignored as prereq.
+If `no_prereq` is enabled by `new()` (like so: `Perl::PrereqScanner::Lite->new({no_prereq => 1})`),
+this module recognize `## no prereq` optional comment. The requiring declaration with this comment on the same line will be ignored as prereq.
 
 For example
 

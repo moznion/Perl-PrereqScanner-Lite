@@ -305,7 +305,7 @@ This scanner uses L<Compiler::Lexer> as tokenizer, therefore processing speed is
 
 =over 4
 
-=item * new
+=item * new($opt)
 
 Create scanner instance.
 
@@ -360,7 +360,8 @@ Extra scanners that are default supported are followings;
 
 =head1 ADDITIONAL NOTATION
 
-This module recognize C<## no prereq> optional comment. The requiring declaration with this comment on the same line will be ignored as prereq.
+If C<no_prereq> is enabled by C<new()> (like so: C<Perl::PrereqScanner::Lite-E<gt>new({no_prereq =E<gt> 1})>),
+this module recognize C<## no prereq> optional comment. The requiring declaration with this comment on the same line will be ignored as prereq.
 
 For example
 
