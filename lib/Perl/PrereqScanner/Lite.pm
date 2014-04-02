@@ -143,10 +143,10 @@ sub _scan {
                     $latest_prereq = $self->_add_minimum($module_name, 0);
                     $does_use_lib_or_constant = 1;
                 }
-
-                if ($module_name =~ /(?:base|parent)/) {
+                elsif ($module_name =~ /(?:base|parent)/) {
                     $is_inherited = 1;
                 }
+
                 $is_prev_module_name = 1;
                 next;
             }
