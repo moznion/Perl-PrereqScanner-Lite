@@ -2,6 +2,11 @@ Revision history for Perl extension Perl-PrereqScanner-Lite
 
 {{$NEXT}}
 
+0.15 2014-04-02T15:38:20Z
+
+    - Support `with` notation for Moose
+    - Support `aliased` notation
+
 0.14 2014-03-29T04:44:12Z
 
     - Change "## no prereq" to be option
