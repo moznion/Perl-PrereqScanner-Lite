@@ -18,6 +18,7 @@ my $got = $scanner->scan_file(catfile($FindBin::Bin, 'resources', 'moose.pl'));
 cmp_deeply(get_reqs_hash($got), {
     Carp           => 0,
     Cwd            => 0,
+    Env            => 0,
     Fnctrl         => 0,
     "Getopt::Long" => 0,
     "Getopt::Std"  => 0,
