@@ -80,6 +80,7 @@ sub _scan {
     my $is_inherited    = 0;
     my $is_in_list      = 0;
     my $is_version_decl = 0;
+    my $is_aliased      = 0;
     my $is_prev_module_name = 0;
 
     my $does_garbage_exist = 0;
@@ -146,6 +147,9 @@ sub _scan {
                 elsif ($module_name =~ /(?:base|parent)/) {
                     $is_inherited = 1;
                 }
+                elsif ($module_name =~ 'aliased') {
+                    $is_aliased = 1;
+                }
 
                 $is_prev_module_name = 1;
                 next;
@@ -165,6 +169,7 @@ sub _scan {
                 $is_inherited   = 0;
                 $is_in_list     = 0;
                 $is_in_usedecl  = 0;
+                $is_aliased     = 0;
                 $does_garbage_exist  = 0;
                 $is_prev_module_name = 0;
                 $does_use_lib_or_constant = 0;
@@ -244,6 +249,14 @@ sub _scan {
                 }
 
                 $is_prev_module_name = 0;
+                next;
+            }
+
+            if ($is_aliased) {
+                if ($token_type == STRING || $token_type == RAW_STRING) {
+                    $latest_prereq = $self->_add_minimum($token->{data} => 0);
+                    $is_aliased = 0;
+                }
                 next;
             }
 

@@ -19,6 +19,8 @@ use base "Pod::Checker";
 use base 'Pod::Find';
 use lib "$FinBin::Bin/../lib";
 use constant FOO => 'BAR';
+use aliased 'Perl::PrereqScanner' => 'P::PS';
+use aliased "Perl::PrereqScanner::Lite" => 'P::PS::Lite';
 require TieHash;
 require Text::Tabs;
 require "Text/Soundex.pm"; # <= should be ignored
