@@ -383,6 +383,20 @@ For example
 
 In this case C<Foo> is the prereq, however C<Bar> is ignored.
 
+=head1 SPEED COMPARISON
+
+=head2 Plain
+
+                                Rate   Perl::PrereqScanner Perl::PrereqScanner::Lite
+    Perl::PrereqScanner       8.57/s                    --                      -97%
+    Perl::PrereqScanner::Lite  246/s                 2770%                        --
+
+=head2 With Moose scanner
+
+                                Rate   Perl::PrereqScanner Perl::PrereqScanner::Lite
+    Perl::PrereqScanner       9.00/s                    --                      -94%
+    Perl::PrereqScanner::Lite  152/s                 1587%                        --
+
 =head1 SEE ALSO
 
 L<Perl::PrereqScanner>, L<Compiler::Lexer>
