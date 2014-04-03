@@ -10,7 +10,7 @@ our @EXPORT = qw(
     REQUIRE_DECL REQUIRED_NAME NAMESPACE_RESOLVER NAMESPACE
     SEMI_COLON USE_DECL USED_NAME REG_LIST REG_EXP LEFT_PAREN
     RIGHT_PAREN STRING RAW_STRING VERSION_STRING INT DOUBLE KEY
-    METHOD WHITESPACE COMMENT
+    METHOD WHITESPACE COMMENT LEFT_BRACE LEFT_BRACKET
 );
 
 use constant {
@@ -23,8 +23,6 @@ use constant {
     USED_NAME          => Compiler::Lexer::TokenType::T_UsedName,
     REG_LIST           => Compiler::Lexer::TokenType::T_RegList,
     REG_EXP            => Compiler::Lexer::TokenType::T_RegExp,
-    LEFT_PAREN         => Compiler::Lexer::TokenType::T_LeftParenthesis,
-    RIGHT_PAREN        => Compiler::Lexer::TokenType::T_RightParenthesis,
     STRING             => Compiler::Lexer::TokenType::T_String,
     RAW_STRING         => Compiler::Lexer::TokenType::T_RawString,
     VERSION_STRING     => Compiler::Lexer::TokenType::T_VersionString,
@@ -34,6 +32,11 @@ use constant {
     METHOD             => Compiler::Lexer::TokenType::T_Method,
     WHITESPACE         => Compiler::Lexer::TokenType::T_WhiteSpace,
     COMMENT            => Compiler::Lexer::TokenType::T_Comment,
+
+    LEFT_PAREN   => Compiler::Lexer::TokenType::T_LeftParenthesis,
+    RIGHT_PAREN  => Compiler::Lexer::TokenType::T_RightParenthesis,
+    LEFT_BRACE   => Compiler::Lexer::TokenType::T_LeftBrace,
+    LEFT_BRACKET => Compiler::Lexer::TokenType::T_LeftBracket,
 };
 
 1;

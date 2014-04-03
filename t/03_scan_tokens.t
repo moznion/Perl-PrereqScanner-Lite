@@ -48,6 +48,8 @@ cmp_deeply(get_reqs_hash($got), {
     'Test::More'   => 0,
     'Perl::PrereqScanner'       => 0,
     'Perl::PrereqScanner::Lite' => 0,
+    'Locale::MakeText'          => 0,
+    'Locale::MakeText::Lexicon' => 0,
 });
 
 done_testing;

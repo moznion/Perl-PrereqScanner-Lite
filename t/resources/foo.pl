@@ -25,6 +25,13 @@ require TieHash;
 require Text::Tabs;
 require "Text/Soundex.pm"; # <= should be ignored
 
+use Locale::MakeText {
+    ja => [ Gettext => File::Spec->catdir() ],
+};
+use Locale::MakeText::Lexicon [
+    ja => [ Gettext => File::Spec->catdir() ],
+];
+
 use Sys::Syslog; ## no prereq
 
 1;
