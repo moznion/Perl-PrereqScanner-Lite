@@ -2,6 +2,11 @@ Revision history for Perl extension Perl-PrereqScanner-Lite
 
 {{$NEXT}}
 
+0.17 2014-04-03T13:19:35Z
+
+    - Fix miss detection
+    - Add documentation about speed comparison
+
 0.16 2014-04-03T07:04:04Z
 
     - Fix scanner for Moose

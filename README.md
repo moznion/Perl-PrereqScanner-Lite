@@ -76,6 +76,20 @@ For example
 
 In this case `Foo` is the prereq, however `Bar` is ignored.
 
+# SPEED COMPARISON
+
+## Plain
+
+                                Rate   Perl::PrereqScanner Perl::PrereqScanner::Lite
+    Perl::PrereqScanner       8.57/s                    --                      -97%
+    Perl::PrereqScanner::Lite  246/s                 2770%                        --
+
+## With Moose scanner
+
+                                Rate   Perl::PrereqScanner Perl::PrereqScanner::Lite
+    Perl::PrereqScanner       9.00/s                    --                      -94%
+    Perl::PrereqScanner::Lite  152/s                 1587%                        --
+
 # SEE ALSO
 
 [Perl::PrereqScanner](https://metacpan.org/pod/Perl::PrereqScanner), [Compiler::Lexer](https://metacpan.org/pod/Compiler::Lexer)
