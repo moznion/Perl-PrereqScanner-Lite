@@ -2,6 +2,10 @@ Revision history for Perl extension Perl-PrereqScanner-Lite
 
 {{$NEXT}}
 
+0.16 2014-04-03T07:04:04Z
+
+    - Fix scanner for Moose
+
 0.15 2014-04-02T15:38:20Z
 
     - Support `with` notation for Moose
