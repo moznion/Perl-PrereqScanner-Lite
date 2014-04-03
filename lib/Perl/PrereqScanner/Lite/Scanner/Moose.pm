@@ -8,7 +8,7 @@ sub scan {
     my ($class, $c, $token, $token_type) = @_;
 
     my $token_data = $token->data;
-    if ($token_type == KEY && $token_data eq 'extends' || $token_data eq 'with') {
+    if ($token_type == KEY && ($token_data eq 'extends' || $token_data eq 'with')) {
         $c->{is_in_moose_inherited} = 1;
         return 1;
     }
@@ -22,7 +22,7 @@ sub scan {
             $c->{is_in_moose_inherited_reglist} = 1;
             return 1;
         }
-        if ($c->{is_in_moose_inherited_reglist}) {
+        if ($c->{is_in_moose_inherited_reglist} && !$c->{does_exist_moose_garbage}) {
             if ($token_type == REG_EXP) {
                 for my $_module_name (split /\s+/, $token_data) {
                     $c->{module_reqs}->add_minimum($_module_name => 0);
@@ -34,8 +34,8 @@ sub scan {
 
         # For simply list
         # e.g.
-        #   extends ('Foo' 'Bar');
-        #   with ('Foo' 'Bar');
+        #   extends ('Foo', 'Bar');
+        #   with ('Foo', 'Bar');
         if ($token_type == LEFT_PAREN) {
             $c->{is_in_moose_inherited_list} = 1;
             return 1;
@@ -45,7 +45,7 @@ sub scan {
             return 1;
         }
         if ($c->{is_in_moose_inherited_list}) {
-            if ($token_type == STRING || $token_type == RAW_STRING) {
+            if (($token_type == STRING || $token_type == RAW_STRING) && !$c->{does_exist_moose_garbage}) {
                 $c->{module_reqs}->add_minimum($token_data => 0);
             }
             return 1;
@@ -55,7 +55,7 @@ sub scan {
         # e.g.
         #   extends "Foo"
         #   with "Foo"
-        if ($token_type == STRING || $token_type == RAW_STRING) {
+        if ((($token_type == STRING || $token_type == RAW_STRING)) && !$c->{does_exist_moose_garbage}) {
             $c->{module_reqs}->add_minimum($token_data => 0);
             return 1;
         }
@@ -65,9 +65,11 @@ sub scan {
             $c->{is_in_moose_inherited}         = 0;
             $c->{is_in_moose_inherited_reglist} = 0;
             $c->{is_in_moose_inherited_list}    = 0;
+            $c->{does_exist_moose_garbage}      = 0;
             return 1;
         }
 
+        $c->{does_exist_moose_garbage} = 1;
         return 1;
     }
 
