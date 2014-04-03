@@ -10,5 +10,8 @@ extends 'POSIX';
 extends "Fnctrl";
 extends qw/Getopt::Long Getopt::Std/;
 extends ("Carp", 'Cwd');
++{
+    with => 'Find::Bin', # Must be ignore
+};
 
 no Moose;
