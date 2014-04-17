@@ -56,6 +56,8 @@ sub prereqs_ok {
         'Perl::PrereqScanner::Lite' => 0,
         'Locale::MakeText'          => 0,
         'Locale::MakeText::Lexicon' => 0,
+        'Moose' => 0,
+        'Any::Moose' => 0,
     });
 }
 

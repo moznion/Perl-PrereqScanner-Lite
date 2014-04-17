@@ -93,14 +93,14 @@ sub _scan {
         my $token_type = $token->{type};
 
         # For require statement
-        if ($token_type == REQUIRE_DECL) {
+        if ($token_type == REQUIRE_DECL || ($token_type == BUILTIN_FUNC && $token->{data} eq 'no')) {
             $is_in_reqdecl = 1;
             next;
         }
         if ($is_in_reqdecl) {
             # e.g.
             #   require Foo;
-            if ($token_type == REQUIRED_NAME) {
+            if ($token_type == REQUIRED_NAME || $token_type == KEY) {
                 $latest_prereq = $self->_add_minimum($token->{data} => 0);
 
                 $is_in_reqdecl = 0;

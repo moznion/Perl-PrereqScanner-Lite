@@ -34,5 +34,8 @@ use Locale::MakeText::Lexicon [
 
 use Sys::Syslog; ## no prereq
 
+no Moose;
+no Any::Moose;
+
 1;
 

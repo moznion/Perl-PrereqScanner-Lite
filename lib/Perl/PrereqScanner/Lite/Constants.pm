@@ -10,7 +10,7 @@ our @EXPORT = qw(
     REQUIRE_DECL REQUIRED_NAME NAMESPACE_RESOLVER NAMESPACE
     SEMI_COLON USE_DECL USED_NAME REG_LIST REG_EXP LEFT_PAREN
     RIGHT_PAREN STRING RAW_STRING VERSION_STRING INT DOUBLE KEY
-    METHOD WHITESPACE COMMENT LEFT_BRACE LEFT_BRACKET
+    METHOD WHITESPACE COMMENT LEFT_BRACE LEFT_BRACKET BUILTIN_FUNC
 );
 
 use constant {
@@ -37,6 +37,8 @@ use constant {
     RIGHT_PAREN  => Compiler::Lexer::TokenType::T_RightParenthesis,
     LEFT_BRACE   => Compiler::Lexer::TokenType::T_LeftBrace,
     LEFT_BRACKET => Compiler::Lexer::TokenType::T_LeftBracket,
+
+    BUILTIN_FUNC => Compiler::Lexer::TokenType::T_BuiltinFunc,
 };
 
 1;
