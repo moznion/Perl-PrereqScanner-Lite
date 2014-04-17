@@ -156,9 +156,7 @@ sub _scan {
             }
 
             # End of declare of use statement
-            if ($token_type == SEMI_COLON || $token->{data} eq ';' || $token_type == LEFT_BRACE || $token_type == LEFT_BRACKET) {
-                #                            ~~~~~~~~~~~~~~~~~~~~~ XXX This problem fixed at https://github.com/goccy/p5-Compiler-Lexer/commit/248c63b6ebf8234657f775e8bd76760af3d00134
-                #                                                  But it has not released yet (in 2014-03-23).
+            if ($token_type == SEMI_COLON || $token_type == LEFT_BRACE || $token_type == LEFT_BRACKET) {
                 if ($module_name && !$does_use_lib_or_constant) {
                     $latest_prereq = $self->_add_minimum($module_name => $module_version);
                 }
