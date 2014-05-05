@@ -12,7 +12,7 @@ use Test::More;
 
 my $scanner = Perl::PrereqScanner::Lite->new({no_prereq => 1});
 
-my $got = $scanner->scan_file(catfile($FindBin::Bin, 'resources', 'foo.pl'));
+my $got = $scanner->scan_file(catfile($FindBin::Bin, 'resources', 'basic.pl'));
 prereqs_ok($got);
 
 done_testing;

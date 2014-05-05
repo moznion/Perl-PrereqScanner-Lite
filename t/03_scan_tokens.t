@@ -12,7 +12,7 @@ use t::Util;
 use Test::More;
 
 my $lexer = Compiler::Lexer->new({verbose => 1});
-my $tokens = $lexer->tokenize(slurp(catfile($FindBin::Bin, 'resources', 'foo.pl')));
+my $tokens = $lexer->tokenize(slurp(catfile($FindBin::Bin, 'resources', 'basic.pl')));
 
 my $scanner = Perl::PrereqScanner::Lite->new;
 
