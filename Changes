@@ -2,6 +2,10 @@ Revision history for Perl extension Perl-PrereqScanner-Lite
 
 {{$NEXT}}
 
+0.19 2014-07-17T01:37:16Z
+
+    - Bug fix (#3)
+
 0.18 2014-04-17T07:00:00Z
 
     - Support `no` statement to scan prereqs
