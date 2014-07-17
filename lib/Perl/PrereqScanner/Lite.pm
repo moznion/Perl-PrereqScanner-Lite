@@ -81,6 +81,7 @@ sub _scan {
     my $is_in_list      = 0;
     my $is_version_decl = 0;
     my $is_aliased      = 0;
+    my $is_prev_version = 0;
     my $is_prev_module_name = 0;
 
     my $does_garbage_exist = 0;
@@ -89,7 +90,7 @@ sub _scan {
     my $latest_prereq = '';
 
     TOP:
-    for my $token (@$tokens) {
+    for (my $i = 0; my $token = $tokens->[$i]; $i++) {
         my $token_type = $token->{type};
 
         # For require statement
@@ -247,6 +248,7 @@ sub _scan {
                 }
 
                 $is_prev_module_name = 0;
+                $is_prev_version = 1;
                 next;
             }
 
@@ -258,9 +260,24 @@ sub _scan {
                 next;
             }
 
+            if (($is_prev_module_name || $is_prev_version) && $token_type == LEFT_PAREN) {
+                my $left_paren_num = 1;
+                for ($i++; $token = $tokens->[$i]; $i++) { # skip content that is surrounded by parens
+                    $token_type = $token->{type};
+
+                    if ($token_type == LEFT_PAREN) {
+                        $left_paren_num++;
+                    }
+                    elsif ($token_type == RIGHT_PAREN) {
+                        last if --$left_paren_num <= 0;
+                    }
+                }
+            }
+
             if ($token_type != WHITESPACE) {
                 $does_garbage_exist  = 1;
                 $is_prev_module_name = 0;
+                $is_prev_version = 0;
             }
             next;
         }
