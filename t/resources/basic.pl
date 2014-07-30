@@ -24,6 +24,9 @@ use aliased "Perl::PrereqScanner::Lite" => 'P::PS::Lite';
 require TieHash;
 require Text::Tabs;
 require "Text/Soundex.pm"; # <= should be ignored
+require $self;             # <= should be ignored
+require $self->foo;        # <= should be ignored
+require $self->_foo;       # <= should be ignored
 
 use Locale::MakeText {
     ja => [ Gettext => File::Spec->catdir() ],
