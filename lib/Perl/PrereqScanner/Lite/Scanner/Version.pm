@@ -19,7 +19,7 @@ sub scan {
 
     if ($c->{is_version_decl} && $token_type == INT || $token_type == DOUBLE || $token_type == VERSION_STRING) {
         if ($c->{module_reqs}->{requirements}->{$c->{not_decl_module_name}}) {
-            $c->_add_minimum($c->{not_decl_module_name} => $token->{data});
+            $c->add_minimum($c->{not_decl_module_name} => $token->{data});
         }
         $c->{is_version_decl} = 0;
         $c->{not_decl_module_name} = '';

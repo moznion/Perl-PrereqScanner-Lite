@@ -25,7 +25,7 @@ sub scan {
         if ($c->{is_in_moose_inherited_reglist} && !$c->{does_exist_moose_garbage}) {
             if ($token_type == REG_EXP) {
                 for my $_module_name (split /\s+/, $token_data) {
-                    $c->{module_reqs}->add_minimum($_module_name => 0);
+                    $c->add_minimum($_module_name => 0);
                 }
                 $c->{is_in_moose_inherited_reglist} = 0;
             }
@@ -46,7 +46,7 @@ sub scan {
         }
         if ($c->{is_in_moose_inherited_list}) {
             if (($token_type == STRING || $token_type == RAW_STRING) && !$c->{does_exist_moose_garbage}) {
-                $c->{module_reqs}->add_minimum($token_data => 0);
+                $c->add_minimum($token_data => 0);
             }
             return 1;
         }
@@ -56,7 +56,7 @@ sub scan {
         #   extends "Foo"
         #   with "Foo"
         if ((($token_type == STRING || $token_type == RAW_STRING)) && !$c->{does_exist_moose_garbage}) {
-            $c->{module_reqs}->add_minimum($token_data => 0);
+            $c->add_minimum($token_data => 0);
             return 1;
         }
 

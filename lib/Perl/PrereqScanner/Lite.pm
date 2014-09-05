@@ -102,7 +102,7 @@ sub _scan {
             # e.g.
             #   require Foo;
             if ($token_type == REQUIRED_NAME || $token_type == KEY) {
-                $latest_prereq = $self->_add_minimum($token->{data} => 0);
+                $latest_prereq = $self->add_minimum($token->{data} => 0);
 
                 $is_in_reqdecl = 0;
                 next;
@@ -118,7 +118,7 @@ sub _scan {
             # End of declare of require statement
             if ($token_type == SEMI_COLON) {
                 if ($module_name) {
-                    $latest_prereq = $self->_add_minimum($module_name => 0);
+                    $latest_prereq = $self->add_minimum($module_name => 0);
                 }
 
                 $module_name   = '';
@@ -142,7 +142,7 @@ sub _scan {
                 $module_name = $token->{data};
 
                 if ($module_name eq 'lib' || $module_name eq 'constant') {
-                    $latest_prereq = $self->_add_minimum($module_name, 0);
+                    $latest_prereq = $self->add_minimum($module_name, 0);
                     $does_use_lib_or_constant = 1;
                 }
                 elsif ($module_name =~ /(?:base|parent)/) {
@@ -159,7 +159,7 @@ sub _scan {
             # End of declare of use statement
             if ($token_type == SEMI_COLON || $token_type == LEFT_BRACE || $token_type == LEFT_BRACKET) {
                 if ($module_name && !$does_use_lib_or_constant) {
-                    $latest_prereq = $self->_add_minimum($module_name => $module_version);
+                    $latest_prereq = $self->add_minimum($module_name => $module_version);
                 }
 
                 $module_name    = '';
@@ -195,7 +195,7 @@ sub _scan {
                 elsif ($is_in_reglist) {
                     if ($token_type == REG_EXP) {
                         for my $_module_name (split /\s+/, $token->{data}) {
-                            $latest_prereq = $self->_add_minimum($_module_name => 0);
+                            $latest_prereq = $self->add_minimum($_module_name => 0);
                         }
                         $is_in_reglist = 0;
                     }
@@ -212,7 +212,7 @@ sub _scan {
                 }
                 elsif ($is_in_list) {
                     if ($token_type == STRING || $token_type == RAW_STRING) {
-                        $latest_prereq = $self->_add_minimum($token->{data} => 0);
+                        $latest_prereq = $self->add_minimum($token->{data} => 0);
                     }
                 }
 
@@ -220,7 +220,7 @@ sub _scan {
                 # e.g.
                 #   use parent "Foo"
                 elsif ($token_type == STRING || $token_type == RAW_STRING) {
-                    $latest_prereq = $self->_add_minimum($token->{data} => 0);
+                    $latest_prereq = $self->add_minimum($token->{data} => 0);
                 }
 
                 $is_prev_module_name = 0;
@@ -234,7 +234,7 @@ sub _scan {
                         # e.g.
                         #   use 5.012;
                         my $perl_version = $token->{data};
-                        $latest_prereq = $self->_add_minimum('perl' => $perl_version);
+                        $latest_prereq = $self->add_minimum('perl' => $perl_version);
                         $is_in_usedecl = 0;
                     }
                 }
@@ -254,7 +254,7 @@ sub _scan {
 
             if ($is_aliased) {
                 if ($token_type == STRING || $token_type == RAW_STRING) {
-                    $latest_prereq = $self->_add_minimum($token->{data} => 0);
+                    $latest_prereq = $self->add_minimum($token->{data} => 0);
                     $is_aliased = 0;
                 }
                 next;
@@ -297,7 +297,7 @@ sub _scan {
     return $self->{module_reqs};
 }
 
-sub _add_minimum {
+sub add_minimum {
     my ($self, $module_name, $module_version) = @_;
 
     if ($module_name) {
