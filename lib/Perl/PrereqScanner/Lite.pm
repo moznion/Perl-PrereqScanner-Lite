@@ -47,8 +47,7 @@ sub scan_file {
     open my $fh, '<', $file or die "Cannot open file: $file";
     my $script = do { local $/; <$fh>; };
 
-    my $tokens = $self->{lexer}->tokenize($script);
-    $self->_scan($tokens);
+    $self->scan_string($script);
 }
 
 sub scan_tokens {
