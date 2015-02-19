@@ -2,6 +2,11 @@ Revision history for Perl extension Perl-PrereqScanner-Lite
 
 {{$NEXT}}
 
+0.22 2015-02-19T02:46:39Z
+
+    - Fix the problem is that it truncates v-string if it has underscore
+      (#6, Thank you for reporting @miyagawa)
+
 0.21 2014-09-05T15:22:30Z
 
     - Fix the bug that mixes the blank in dependencies (Thank you for reporting @jscook)

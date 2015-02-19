@@ -6,7 +6,7 @@ use Compiler::Lexer;
 use CPAN::Meta::Requirements;
 use Perl::PrereqScanner::Lite::Constants;
 
-our $VERSION = "0.21";
+our $VERSION = "0.22";
 
 sub new {
     my ($class, $opt) = @_;

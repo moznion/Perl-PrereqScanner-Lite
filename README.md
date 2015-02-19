@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/moznion/Perl-PrereqScanner-Lite.png?branch=master)](https://travis-ci.org/moznion/Perl-PrereqScanner-Lite) [![Coverage Status](https://coveralls.io/repos/moznion/Perl-PrereqScanner-Lite/badge.png?branch=master)](https://coveralls.io/r/moznion/Perl-PrereqScanner-Lite?branch=master)
+[![Build Status](https://travis-ci.org/moznion/Perl-PrereqScanner-Lite.svg?branch=master)](https://travis-ci.org/moznion/Perl-PrereqScanner-Lite) [![Coverage Status](https://img.shields.io/coveralls/moznion/Perl-PrereqScanner-Lite/master.svg)](https://coveralls.io/r/moznion/Perl-PrereqScanner-Lite?branch=master)
 # NAME
 
 Perl::PrereqScanner::Lite - Lightweight Prereqs Scanner for Perl

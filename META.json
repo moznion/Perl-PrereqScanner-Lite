@@ -4,7 +4,7 @@
       "moznion <moznion@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v2.1.1, CPAN::Meta::Converter version 2.142060",
+   "generated_by" : "Minilla/v2.3.0, CPAN::Meta::Converter version 2.143240",
    "license" : [
       "perl_5"
    ],
@@ -70,9 +70,9 @@
       "homepage" : "https://github.com/moznion/Perl-PrereqScanner-Lite",
       "repository" : {
          "type" : "git",
-         "url" : "git://github.com/moznion/Perl-PrereqScanner-Lite",
+         "url" : "git://github.com/moznion/Perl-PrereqScanner-Lite.git",
          "web" : "https://github.com/moznion/Perl-PrereqScanner-Lite"
       }
    },
-   "version" : "0.21"
+   "version" : "0.22"
 }
