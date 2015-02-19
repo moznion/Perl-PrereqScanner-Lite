@@ -47,8 +47,7 @@ sub scan_file {
     open my $fh, '<', $file or die "Cannot open file: $file";
     my $script = do { local $/; <$fh>; };
 
-    my $tokens = $self->{lexer}->tokenize($script);
-    $self->_scan($tokens);
+    $self->scan_string($script);
 }
 
 sub scan_tokens {
@@ -272,6 +271,16 @@ sub _scan {
                         last if --$left_paren_num <= 0;
                     }
                 }
+                next;
+            }
+
+            # XXX Workaround for v-strings which has underscore at tail (e.g. v1.1_1).
+            # It is a matter of Compiler::Lexer.
+            #
+            # ref: https://github.com/moznion/Perl-PrereqScanner-Lite/issues/6
+            if ($is_prev_version && $token_type == KEY) {
+                $module_version .= $token->{data};
+                next;
             }
 
             if ($token_type != WHITESPACE) {
