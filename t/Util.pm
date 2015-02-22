@@ -58,6 +58,7 @@ sub prereqs_ok {
         'Locale::MakeText::Lexicon' => 0,
         'Moose' => 0,
         'Any::Moose' => 0,
+        'if' => 0,
     });
 }
 

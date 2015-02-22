@@ -137,7 +137,14 @@ sub _scan {
             # e.g.
             #   use Foo;
             #   use parent qw/Foo/;
-            if ($token_type == USED_NAME) {
+            #
+            if ($token_type == USED_NAME || $token_type == IF_STMT) {
+                # XXX                       ~~~~~~~~~~~~~~~~~~~~~~
+                # Workaround for `use if` statement
+                # It is a matter of Compiler::Lexer (maybe).
+                #
+                #   use if $] < 5.009_005, 'MRO::Compat';
+
                 $module_name = $token->{data};
 
                 if ($module_name eq 'lib' || $module_name eq 'constant') {
