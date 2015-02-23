@@ -2,6 +2,7 @@ package Perl::PrereqScanner::Lite;
 use 5.008005;
 use strict;
 use warnings;
+use Carp ();
 use Compiler::Lexer;
 use CPAN::Meta::Requirements;
 use Perl::PrereqScanner::Lite::Constants;
@@ -19,9 +20,29 @@ sub new {
         $lexer = Compiler::Lexer->new(),
     }
 
+    my $extra_scanners = [];
+    if (my $scanner_names = $opt->{extra_scanners}) {
+        if (ref $scanner_names eq 'ARRAY') {
+            for my $scanner_name (@$scanner_names) {
+                my $extra_scanner;
+                if (substr($scanner_name, 0, 1) eq '+') {
+                    $extra_scanner = substr $scanner_name, 1;
+                }
+                else {
+                    $extra_scanner = "Perl::PrereqScanner::Lite::Scanner::$scanner_name";
+                }
+
+                eval "require $extra_scanner"; ## no critic
+                push @$extra_scanners, $extra_scanner;
+            }
+        } else {
+            Carp::croak "'extra_scanners' option must be array reference";
+        }
+    }
+
     bless {
         lexer          => $lexer,
-        extra_scanners => [],
+        extra_scanners => $extra_scanners,
         module_reqs    => CPAN::Meta::Requirements->new,
     }, $class;
 }
@@ -29,7 +50,14 @@ sub new {
 sub add_extra_scanner {
     my ($self, $scanner_name) = @_;
 
-    my $extra_scanner = "Perl::PrereqScanner::Lite::Scanner::$scanner_name";
+    my $extra_scanner;
+    if (substr($scanner_name, 0, 1) eq '+') {
+        $extra_scanner = substr $scanner_name, 1;
+    }
+    else {
+        $extra_scanner = "Perl::PrereqScanner::Lite::Scanner::$scanner_name";
+    }
+
     eval "require $extra_scanner"; ## no critic
     push @{$self->{extra_scanners}}, $extra_scanner;
 }

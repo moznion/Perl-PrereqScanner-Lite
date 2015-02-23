@@ -22,6 +22,7 @@ cmp_deeply(get_reqs_hash($got), {
     strict                                 => 0,
     warnings                               => 0,
     "CPAN::Meta::Requirements"             => 0,
+    Carp                                   => 0,
 });
 
 done_testing;
