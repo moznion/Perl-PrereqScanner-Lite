@@ -49,6 +49,7 @@
       "runtime" : {
          "requires" : {
             "CPAN::Meta::Requirements" : "2.125",
+            "Carp" : "0",
             "Compiler::Lexer" : "0.22",
             "Module::Path" : "0",
             "parent" : "0",

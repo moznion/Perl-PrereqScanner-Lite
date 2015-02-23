@@ -309,15 +309,6 @@ sub _scan {
                 next;
             }
 
-            # XXX Workaround for v-strings which has underscore at tail (e.g. v1.1_1).
-            # It is a matter of Compiler::Lexer.
-            #
-            # ref: https://github.com/moznion/Perl-PrereqScanner-Lite/issues/6
-            if ($is_prev_version && $token_type == KEY) {
-                $module_version .= $token->{data};
-                next;
-            }
-
             if ($token_type != WHITESPACE) {
                 $does_garbage_exist  = 1;
                 $is_prev_module_name = 0;
