@@ -356,7 +356,7 @@ Perl::PrereqScanner::Lite - Lightweight Prereqs Scanner for Perl
     use Perl::PrereqScanner::Lite;
 
     my $scanner = Perl::PrereqScanner::Lite->new;
-    $scanner->add_extra_scanner('Moose');
+    $scanner->add_extra_scanner('Moose'); # add extra scanner for moose style
     my $modules = $scanner->scan_file('path/to/file');
 
 =head1 DESCRIPTION
@@ -366,17 +366,37 @@ This scanner uses L<Compiler::Lexer> as tokenizer, therefore processing speed is
 
 =head1 METHODS
 
+=head2 new($opt)
+
+Create a scanner instance.
+
+C<$opt> must be hash reference. It accepts following keys of hash:
+
 =over 4
 
-=item * new($opt)
+=item * extra_scanners
 
-Create scanner instance.
+It specifies extra scanners. This item must be array reference.
 
-=item * scan_file($file_path)
+e.g.
+
+    my $scanner = Perl::PrereqScanner::Lite->new(
+        extra_scanners => [qw/Moose Version/]
+    );
+
+See also L</add_extra_scanner($scanner_name)>.
+
+=item * no_prereq
+
+It specifies to use C<## no prereq> or not. Please see also L</ADDITIONAL NOTATION>.
+
+=back
+
+=head2 scan_file($file_path)
 
 Scan and figure out prereqs which is instance of C<CPAN::Meta::Requirements> by file path.
 
-=item * scan_string($string)
+=head2 scan_string($string)
 
 Scan and figure out prereqs which is instance of C<CPAN::Meta::Requirements> by source code string written in perl.
 
@@ -386,7 +406,7 @@ e.g.
     my $string = do { local $/; <$fh> };
     my $modules = $scanner->scan_string($string);
 
-=item * scan_module($module_name)
+=head2 scan_module($module_name)
 
 Scan and figure out prereqs which is instance of C<CPAN::Meta::Requirements> by module name.
 
@@ -394,7 +414,7 @@ e.g.
 
     my $modules = $scanner->scan_module('Perl::PrereqScanner::Lite');
 
-=item * scan_tokens($tokens)
+=head2 scan_tokens($tokens)
 
 Scan and figure out prereqs which is instance of C<CPAN::Meta::Requirements> by tokens of L<Compiler::Lexer>.
 
@@ -405,9 +425,11 @@ e.g.
     my $tokens = Compiler::Lexer->new->tokenize($string);
     my $modules = $scanner->scan_tokens($tokens);
 
-=item * add_extra_scanner($scanner_name)
+=head2 add_extra_scanner($scanner_name)
 
 Add extra scanner to scan and figure out prereqs. This module loads extra scanner such as C<Perl::PrereqScanner::Lite::Scanner::$scanner_name> if specifying scanner name through this method.
+
+If you want to specify an extra scanner from external package without C<Perl::PrereqScanner::Lite::> prefix, you can prepend C<+> to C<$scanner_name>. Like so C<+Your::Awesome::Scanner>.
 
 Extra scanners that are default supported are followings;
 
@@ -416,8 +438,6 @@ Extra scanners that are default supported are followings;
 =item * L<Perl::PrereqScanner::Lite::Scanner::Moose>
 
 =item * L<Perl::PrereqScanner::Lite::Scanner::Version>
-
-=back
 
 =back
 

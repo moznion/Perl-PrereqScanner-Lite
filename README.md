@@ -8,7 +8,7 @@ Perl::PrereqScanner::Lite - Lightweight Prereqs Scanner for Perl
     use Perl::PrereqScanner::Lite;
 
     my $scanner = Perl::PrereqScanner::Lite->new;
-    $scanner->add_extra_scanner('Moose');
+    $scanner->add_extra_scanner('Moose'); # add extra scanner for moose style
     my $modules = $scanner->scan_file('path/to/file');
 
 # DESCRIPTION
@@ -18,51 +18,71 @@ This scanner uses [Compiler::Lexer](https://metacpan.org/pod/Compiler::Lexer) as
 
 # METHODS
 
-- new($opt)
+## new($opt)
 
-    Create scanner instance.
+Create a scanner instance.
 
-- scan\_file($file\_path)
+`$opt` must be hash reference. It accepts following keys of hash:
 
-    Scan and figure out prereqs which is instance of `CPAN::Meta::Requirements` by file path.
+- extra\_scanners
 
-- scan\_string($string)
-
-    Scan and figure out prereqs which is instance of `CPAN::Meta::Requirements` by source code string written in perl.
+    It specifies extra scanners. This item must be array reference.
 
     e.g.
 
-        open my $fh, '<', __FILE__;
-        my $string = do { local $/; <$fh> };
-        my $modules = $scanner->scan_string($string);
+        my $scanner = Perl::PrereqScanner::Lite->new(
+            extra_scanners => [qw/Moose Version/]
+        );
 
-- scan\_module($module\_name)
+    See also ["add\_extra\_scanner($scanner\_name)"](#add_extra_scanner-scanner_name).
 
-    Scan and figure out prereqs which is instance of `CPAN::Meta::Requirements` by module name.
+- no\_prereq
 
-    e.g.
+    It specifies to use `## no prereq` or not. Please see also ["ADDITIONAL NOTATION"](#additional-notation).
 
-        my $modules = $scanner->scan_module('Perl::PrereqScanner::Lite');
+## scan\_file($file\_path)
 
-- scan\_tokens($tokens)
+Scan and figure out prereqs which is instance of `CPAN::Meta::Requirements` by file path.
 
-    Scan and figure out prereqs which is instance of `CPAN::Meta::Requirements` by tokens of [Compiler::Lexer](https://metacpan.org/pod/Compiler::Lexer).
+## scan\_string($string)
 
-    e.g.
+Scan and figure out prereqs which is instance of `CPAN::Meta::Requirements` by source code string written in perl.
 
-        open my $fh, '<', __FILE__;
-        my $string = do { local $/; <$fh> };
-        my $tokens = Compiler::Lexer->new->tokenize($string);
-        my $modules = $scanner->scan_tokens($tokens);
+e.g.
 
-- add\_extra\_scanner($scanner\_name)
+    open my $fh, '<', __FILE__;
+    my $string = do { local $/; <$fh> };
+    my $modules = $scanner->scan_string($string);
 
-    Add extra scanner to scan and figure out prereqs. This module loads extra scanner such as `Perl::PrereqScanner::Lite::Scanner::$scanner_name` if specifying scanner name through this method.
+## scan\_module($module\_name)
 
-    Extra scanners that are default supported are followings;
+Scan and figure out prereqs which is instance of `CPAN::Meta::Requirements` by module name.
 
-    - [Perl::PrereqScanner::Lite::Scanner::Moose](https://metacpan.org/pod/Perl::PrereqScanner::Lite::Scanner::Moose)
-    - [Perl::PrereqScanner::Lite::Scanner::Version](https://metacpan.org/pod/Perl::PrereqScanner::Lite::Scanner::Version)
+e.g.
+
+    my $modules = $scanner->scan_module('Perl::PrereqScanner::Lite');
+
+## scan\_tokens($tokens)
+
+Scan and figure out prereqs which is instance of `CPAN::Meta::Requirements` by tokens of [Compiler::Lexer](https://metacpan.org/pod/Compiler::Lexer).
+
+e.g.
+
+    open my $fh, '<', __FILE__;
+    my $string = do { local $/; <$fh> };
+    my $tokens = Compiler::Lexer->new->tokenize($string);
+    my $modules = $scanner->scan_tokens($tokens);
+
+## add\_extra\_scanner($scanner\_name)
+
+Add extra scanner to scan and figure out prereqs. This module loads extra scanner such as `Perl::PrereqScanner::Lite::Scanner::$scanner_name` if specifying scanner name through this method.
+
+If you want to specify an extra scanner from external package without `Perl::PrereqScanner::Lite::` prefix, you can prepend `+` to `$scanner_name`. Like so `+Your::Awesome::Scanner`.
+
+Extra scanners that are default supported are followings;
+
+- [Perl::PrereqScanner::Lite::Scanner::Moose](https://metacpan.org/pod/Perl::PrereqScanner::Lite::Scanner::Moose)
+- [Perl::PrereqScanner::Lite::Scanner::Version](https://metacpan.org/pod/Perl::PrereqScanner::Lite::Scanner::Version)
 
 # ADDITIONAL NOTATION
 
