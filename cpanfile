@@ -1,3 +1,4 @@
+requires 'Carp', 0;
 requires 'Compiler::Lexer', '0.22';
 requires 'CPAN::Meta::Requirements', '2.125';
 requires 'Module::Path';
