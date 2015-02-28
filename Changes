@@ -2,6 +2,10 @@ Revision history for Perl extension Perl-PrereqScanner-Lite
 
 {{$NEXT}}
 
+0.24 2015-02-28T05:01:13Z
+
+    - Improve plugin mechanism for extra scanners
+
 0.23 2015-02-22T10:59:30Z
 
     - Fix lexical analysis processing

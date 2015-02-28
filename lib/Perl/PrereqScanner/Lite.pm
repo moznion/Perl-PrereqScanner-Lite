@@ -7,7 +7,7 @@ use Compiler::Lexer;
 use CPAN::Meta::Requirements;
 use Perl::PrereqScanner::Lite::Constants;
 
-our $VERSION = "0.23";
+our $VERSION = "0.24";
 
 sub new {
     my ($class, $opt) = @_;
@@ -346,6 +346,8 @@ sub add_minimum {
 __END__
 
 =encoding utf-8
+
+=for stopwords prepend
 
 =head1 NAME
 
