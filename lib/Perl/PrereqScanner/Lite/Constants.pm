@@ -11,7 +11,7 @@ our @EXPORT = qw(
     SEMI_COLON USE_DECL USED_NAME REG_LIST REG_EXP LEFT_PAREN
     RIGHT_PAREN STRING RAW_STRING VERSION_STRING INT DOUBLE KEY
     METHOD WHITESPACE COMMENT LEFT_BRACE LEFT_BRACKET BUILTIN_FUNC
-    IF_STMT
+    IF_STMT COMMA
 );
 
 use constant {
@@ -34,6 +34,7 @@ use constant {
     WHITESPACE         => Compiler::Lexer::TokenType::T_WhiteSpace,
     COMMENT            => Compiler::Lexer::TokenType::T_Comment,
     IF_STMT            => Compiler::Lexer::TokenType::T_IfStmt,
+    COMMA              => Compiler::Lexer::TokenType::T_Comma,
 
     LEFT_PAREN   => Compiler::Lexer::TokenType::T_LeftParenthesis,
     RIGHT_PAREN  => Compiler::Lexer::TokenType::T_RightParenthesis,

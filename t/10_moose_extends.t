@@ -27,7 +27,9 @@ subtest 'omitted scanner name' => sub {
             Moose          => 0,
             POSIX          => 0,
             strict         => 0,
-            warnings       => 0
+            warnings       => 0,
+            perlIO         => 0,
+            Opcode         => 0,
         });
     };
 
@@ -47,7 +49,9 @@ subtest 'omitted scanner name' => sub {
             Moose          => 0,
             POSIX          => 0,
             strict         => 0,
-            warnings       => 0
+            warnings       => 0,
+            perlIO         => 0,
+            Opcode         => 0,
         });
     };
 };
@@ -68,7 +72,9 @@ subtest 'fully scanner name' => sub {
             Moose          => 0,
             POSIX          => 0,
             strict         => 0,
-            warnings       => 0
+            warnings       => 0,
+            perlIO         => 0,
+            Opcode         => 0,
         });
     };
 
@@ -88,7 +94,9 @@ subtest 'fully scanner name' => sub {
             Moose          => 0,
             POSIX          => 0,
             strict         => 0,
-            warnings       => 0
+            warnings       => 0,
+            perlIO         => 0,
+            Opcode         => 0,
         });
     };
 };

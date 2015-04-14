@@ -69,7 +69,12 @@ sub scan {
             return 1;
         }
 
-        $c->{does_exist_moose_garbage} = 1;
+        # For
+        #   extends 'Class1', 'Class2';
+        if ($token_type != COMMA) {
+            $c->{does_exist_moose_garbage} = 1;
+        }
+
         return 1;
     }
 
