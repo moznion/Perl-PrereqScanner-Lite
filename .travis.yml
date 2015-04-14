@@ -10,3 +10,7 @@ after_success:
   - cover -delete
   - perl Build.PL && ./Build build && HARNESS_PERL_SWITCHES="-MDevel::Cover=+ignore,inc" PERL5LIB="lib" prove t/
   - cover -report coveralls
+sudo: false
+cache:
+  directories:
+    - cpan_modules
