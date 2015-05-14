@@ -21,7 +21,7 @@ sub scan {
                 return 1;
             }
 
-            if ($token_type == RIGHT_PAREN) {
+            if ($token_type == RIGHT_BRACE) {
                 $c->{is_in_moose_role_def} = 0;
                 return 1;
             }
