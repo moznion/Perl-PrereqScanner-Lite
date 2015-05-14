@@ -75,5 +75,8 @@
          "web" : "https://github.com/moznion/Perl-PrereqScanner-Lite"
       }
    },
-   "version" : "0.25"
+   "version" : "0.26",
+   "x_contributors" : [
+      "Kenichi Ishigaki <ishigaki@cpan.org>"
+   ]
 }

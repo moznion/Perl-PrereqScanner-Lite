@@ -2,6 +2,10 @@ Revision history for Perl extension Perl-PrereqScanner-Lite
 
 {{$NEXT}}
 
+0.26 2015-05-14T16:15:05Z
+
+    - Fix moose scanner (@charsbar++)
+
 0.25 2015-04-18T12:14:20Z
 
     - Fix some Moose scanners bugs
