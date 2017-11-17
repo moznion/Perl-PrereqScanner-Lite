@@ -2,6 +2,10 @@ Revision history for Perl extension Perl-PrereqScanner-Lite
 
 {{$NEXT}}
 
+0.27 2017-11-17T02:11:36Z
+
+    - Fix v_string test to work with modern version.pm (@ctriv++)
+
 0.26 2015-05-14T16:15:05Z
 
     - Fix moose scanner (@charsbar++)
